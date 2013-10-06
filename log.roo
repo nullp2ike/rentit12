@@ -5,3 +5,29 @@ project --topLevelPackage cs.ut --projectName Rentit --java 7 --packaging JAR
 jpa setup --database POSTGRES --provider HIBERNATE --databaseName rentitDB --userName postgres --password q1w2e3r4
 // [failed] database introspect --schema public
 web mvc setup
+hint
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-06 14:44:21
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-06 15:26:54
+entity jpa --class ~.domain.Plant --testAutomatically
+field string --fieldName name
+field string --fieldName description
+field number --fieldName identifier --type int
+field number --fieldName pricePerDay --type float
+entity jpa --class ~.domain.PurchaseOrder --testAutomatically
+field date --fieldName startDate --type java.util.Date
+field date --fieldName endDate --type java.util.Date
+field number --fieldName cost --type float
+field string --fieldName constructionSite
+field number --fieldName identifier --type int
+enum type --class ~.domain.Status
+// [failed] enum constant --name APPROVED
+focus --class ~.domain.HireRequestStatus 
+enum constant --name APPROVED
+enum constant --name REJECTED
+enum constant --name PENDING
+focus --class ~.domain.PurchaseOrder
+field enum --fieldName status --type ~.domain.HireRequestStatus
+// [failed] field reference --fieldName plant --type ~.domain.Plant --cardinality ONE_TO_MANY 
+field reference --fieldName plant --type ~.domain.Plant --cardinality ONE_TO_ONE
+// [failed] field reference --fieldName status --type ~.domain.HireRequestStatus --cardinality ONE_TO_ONE 
+perform tests
