@@ -1,0 +1,7 @@
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-06 11:37:14
+project --topLevelPackage cs.ut --projectName Rentit --java 7 --packaging JAR
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-06 11:37:23
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-06 11:38:08
+jpa setup --database POSTGRES --provider HIBERNATE --databaseName rentitDB --userName postgres --password q1w2e3r4
+// [failed] database introspect --schema public
+web mvc setup
