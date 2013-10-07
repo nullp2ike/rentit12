@@ -31,3 +31,7 @@ field enum --fieldName status --type ~.domain.HireRequestStatus
 field reference --fieldName plant --type ~.domain.Plant --cardinality ONE_TO_ONE
 // [failed] field reference --fieldName status --type ~.domain.HireRequestStatus --cardinality ONE_TO_ONE 
 perform tests
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-06 20:11:53
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-07 23:31:55
+web mvc scaffold --class ~.domain.PlantController --backingType ~.domain.Plant
+web mvc scaffold --class ~.domain.PurchaseOrderController --backingType ~.domain.PurchaseOrder
