@@ -17,7 +17,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Plant, String> ApplicationConversionServiceFactoryBean.getPlantToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<cs.ut.domain.Plant, java.lang.String>() {
             public String convert(Plant plant) {
-                return new StringBuilder().append(plant.getName()).append(' ').append(plant.getDescription()).append(' ').append(plant.getIdentifier()).append(' ').append(plant.getPricePerDay()).toString();
+                return new StringBuilder().append(plant.getName()).append(' ').append(plant.getDescription()).append(' ').append(plant.getPricePerDay()).toString();
             }
         };
     }
@@ -41,7 +41,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<PurchaseOrder, String> ApplicationConversionServiceFactoryBean.getPurchaseOrderToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<cs.ut.domain.PurchaseOrder, java.lang.String>() {
             public String convert(PurchaseOrder purchaseOrder) {
-                return new StringBuilder().append(purchaseOrder.getStartDate()).append(' ').append(purchaseOrder.getEndDate()).append(' ').append(purchaseOrder.getCost()).append(' ').append(purchaseOrder.getConstructionSite()).toString();
+                return new StringBuilder().append(purchaseOrder.getStartDate()).append(' ').append(purchaseOrder.getEndDate()).append(' ').append(purchaseOrder.getTotalCost()).append(' ').append(purchaseOrder.getConstructionSite()).toString();
             }
         };
     }

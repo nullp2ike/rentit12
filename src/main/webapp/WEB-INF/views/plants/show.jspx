@@ -5,7 +5,6 @@
     <page:show id="ps_cs_ut_domain_Plant" object="${plant}" path="/plants" z="q78C/UQtYYpmhprEFbJmkj7CA60=">
         <field:display field="name" id="s_cs_ut_domain_Plant_name" object="${plant}" z="CexACThB0BhX72jUzWyjfgcfGvY="/>
         <field:display field="description" id="s_cs_ut_domain_Plant_description" object="${plant}" z="vBy49Ih9WtdHJfWOkk8t19taXlM="/>
-        <field:display field="identifier" id="s_cs_ut_domain_Plant_identifier" object="${plant}" z="oQiUHbGm+gEjQs3y/bzeDaShEp8="/>
         <field:display field="pricePerDay" id="s_cs_ut_domain_Plant_pricePerDay" object="${plant}" z="22v4LfcOf7WUGtwEq7R/VBtWtv4="/>
     </page:show>
 </div>

@@ -4,6 +4,7 @@
 package cs.ut.domain;
 
 import cs.ut.domain.Plant;
+import java.math.BigDecimal;
 
 privileged aspect Plant_Roo_JavaBean {
     
@@ -23,19 +24,11 @@ privileged aspect Plant_Roo_JavaBean {
         this.description = description;
     }
     
-    public int Plant.getIdentifier() {
-        return this.identifier;
-    }
-    
-    public void Plant.setIdentifier(int identifier) {
-        this.identifier = identifier;
-    }
-    
-    public float Plant.getPricePerDay() {
+    public BigDecimal Plant.getPricePerDay() {
         return this.pricePerDay;
     }
     
-    public void Plant.setPricePerDay(float pricePerDay) {
+    public void Plant.setPricePerDay(BigDecimal pricePerDay) {
         this.pricePerDay = pricePerDay;
     }
     

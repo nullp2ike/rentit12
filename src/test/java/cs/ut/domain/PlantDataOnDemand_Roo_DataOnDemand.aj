@@ -5,6 +5,7 @@ package cs.ut.domain;
 
 import cs.ut.domain.Plant;
 import cs.ut.domain.PlantDataOnDemand;
+import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,7 +26,6 @@ privileged aspect PlantDataOnDemand_Roo_DataOnDemand {
     public Plant PlantDataOnDemand.getNewTransientPlant(int index) {
         Plant obj = new Plant();
         setDescription(obj, index);
-        setIdentifier(obj, index);
         setName(obj, index);
         setPricePerDay(obj, index);
         return obj;
@@ -36,18 +36,13 @@ privileged aspect PlantDataOnDemand_Roo_DataOnDemand {
         obj.setDescription(description);
     }
     
-    public void PlantDataOnDemand.setIdentifier(Plant obj, int index) {
-        int identifier = index;
-        obj.setIdentifier(identifier);
-    }
-    
     public void PlantDataOnDemand.setName(Plant obj, int index) {
         String name = "name_" + index;
         obj.setName(name);
     }
     
     public void PlantDataOnDemand.setPricePerDay(Plant obj, int index) {
-        float pricePerDay = new Integer(index).floatValue();
+        BigDecimal pricePerDay = BigDecimal.valueOf(index);
         obj.setPricePerDay(pricePerDay);
     }
     

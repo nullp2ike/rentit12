@@ -6,7 +6,6 @@
         <table:table data="${plants}" id="l_cs_ut_domain_Plant" path="/plants" z="mxoXG+cFjp/mN+nd7Ebf9u4KOMQ=">
             <table:column id="c_cs_ut_domain_Plant_name" property="name" z="siieP03oHmmYUmxIo2PQ574KCtw="/>
             <table:column id="c_cs_ut_domain_Plant_description" property="description" z="VDwUEyl0dYyMNV4SxNIcdzjtvSk="/>
-            <table:column id="c_cs_ut_domain_Plant_identifier" property="identifier" z="x9wJhbA3wAZWOl+AOAXJQtD7oeg="/>
             <table:column id="c_cs_ut_domain_Plant_pricePerDay" property="pricePerDay" z="BYUkGPqXKGiY1iqaxLCQhX0r2w4="/>
         </table:table>
     </page:list>

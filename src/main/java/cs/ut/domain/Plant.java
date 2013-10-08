@@ -1,4 +1,8 @@
 package cs.ut.domain;
+import java.math.BigDecimal;
+
+import javax.validation.constraints.NotNull;
+
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -10,17 +14,16 @@ public class Plant {
 
     /**
      */
+    @NotNull
     private String name;
 
     /**
      */
+    @NotNull
     private String description;
 
     /**
      */
-    private int identifier;
-
-    /**
-     */
-    private float pricePerDay;
+    @NotNull
+    private BigDecimal pricePerDay;
 }

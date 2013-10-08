@@ -8,7 +8,9 @@ import cs.ut.domain.Plant;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.PurchaseOrderController;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.joda.time.format.DateTimeFormat;
@@ -38,6 +40,11 @@ privileged aspect PurchaseOrderController_Roo_Controller {
     @RequestMapping(params = "form", produces = "text/html")
     public String PurchaseOrderController.createForm(Model uiModel) {
         populateEditForm(uiModel, new PurchaseOrder());
+        List<String[]> dependencies = new ArrayList<String[]>();
+        if (Plant.countPlants() == 0) {
+            dependencies.add(new String[] { "plant", "plants" });
+        }
+        uiModel.addAttribute("dependencies", dependencies);
         return "purchaseorders/create";
     }
     

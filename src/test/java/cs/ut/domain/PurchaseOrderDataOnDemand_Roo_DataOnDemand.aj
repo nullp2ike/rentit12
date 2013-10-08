@@ -4,9 +4,11 @@
 package cs.ut.domain;
 
 import cs.ut.domain.HireRequestStatus;
+import cs.ut.domain.Plant;
 import cs.ut.domain.PlantDataOnDemand;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.PurchaseOrderDataOnDemand;
+import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,11 +36,11 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
     public PurchaseOrder PurchaseOrderDataOnDemand.getNewTransientPurchaseOrder(int index) {
         PurchaseOrder obj = new PurchaseOrder();
         setConstructionSite(obj, index);
-        setCost(obj, index);
         setEndDate(obj, index);
-        setIdentifier(obj, index);
+        setPlant(obj, index);
         setStartDate(obj, index);
         setStatus(obj, index);
+        setTotalCost(obj, index);
         return obj;
     }
     
@@ -47,19 +49,14 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
         obj.setConstructionSite(constructionSite);
     }
     
-    public void PurchaseOrderDataOnDemand.setCost(PurchaseOrder obj, int index) {
-        float cost = new Integer(index).floatValue();
-        obj.setCost(cost);
-    }
-    
     public void PurchaseOrderDataOnDemand.setEndDate(PurchaseOrder obj, int index) {
         Date endDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setEndDate(endDate);
     }
     
-    public void PurchaseOrderDataOnDemand.setIdentifier(PurchaseOrder obj, int index) {
-        int identifier = index;
-        obj.setIdentifier(identifier);
+    public void PurchaseOrderDataOnDemand.setPlant(PurchaseOrder obj, int index) {
+        Plant plant = plantDataOnDemand.getSpecificPlant(index);
+        obj.setPlant(plant);
     }
     
     public void PurchaseOrderDataOnDemand.setStartDate(PurchaseOrder obj, int index) {
@@ -70,6 +67,11 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
     public void PurchaseOrderDataOnDemand.setStatus(PurchaseOrder obj, int index) {
         HireRequestStatus status = HireRequestStatus.class.getEnumConstants()[0];
         obj.setStatus(status);
+    }
+    
+    public void PurchaseOrderDataOnDemand.setTotalCost(PurchaseOrder obj, int index) {
+        BigDecimal totalCost = BigDecimal.valueOf(index);
+        obj.setTotalCost(totalCost);
     }
     
     public PurchaseOrder PurchaseOrderDataOnDemand.getSpecificPurchaseOrder(int index) {

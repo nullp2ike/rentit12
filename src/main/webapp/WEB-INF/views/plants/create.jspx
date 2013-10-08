@@ -5,8 +5,7 @@
     <form:create id="fc_cs_ut_domain_Plant" modelAttribute="plant" path="/plants" render="${empty dependencies}" z="SAo4gqQuyg6DdEfZPvv/fo0yYzc=">
         <field:input field="name" id="c_cs_ut_domain_Plant_name" z="LpL8AqCNZfqA1Xeu0UfiDPAmiBM="/>
         <field:input field="description" id="c_cs_ut_domain_Plant_description" z="OoVqAUbdQiwBFdCn4zZob7tcF1Q="/>
-        <field:input field="identifier" id="c_cs_ut_domain_Plant_identifier" z="MVi3xIFbGAPRqeo2cqd66i4fDoU="/>
-        <field:input field="pricePerDay" id="c_cs_ut_domain_Plant_pricePerDay" z="AFlPFgFeKNQLrG3t+vY8fLRufDU="/>
+        <field:input field="pricePerDay" id="c_cs_ut_domain_Plant_pricePerDay" required="true" validationMessageCode="field_invalid_number" z="I3I0gPrcmbsgcvL9UTzV4OYZatU="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_cs_ut_domain_Plant" render="${not empty dependencies}" z="yPxnFypilTxUhLw3m8+0ryyd42w="/>
 </div>

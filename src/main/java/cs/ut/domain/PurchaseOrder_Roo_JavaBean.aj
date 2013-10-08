@@ -6,6 +6,7 @@ package cs.ut.domain;
 import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.Plant;
 import cs.ut.domain.PurchaseOrder;
+import java.math.BigDecimal;
 import java.util.Date;
 
 privileged aspect PurchaseOrder_Roo_JavaBean {
@@ -26,12 +27,12 @@ privileged aspect PurchaseOrder_Roo_JavaBean {
         this.endDate = endDate;
     }
     
-    public float PurchaseOrder.getCost() {
-        return this.cost;
+    public BigDecimal PurchaseOrder.getTotalCost() {
+        return this.totalCost;
     }
     
-    public void PurchaseOrder.setCost(float cost) {
-        this.cost = cost;
+    public void PurchaseOrder.setTotalCost(BigDecimal totalCost) {
+        this.totalCost = totalCost;
     }
     
     public String PurchaseOrder.getConstructionSite() {
@@ -40,14 +41,6 @@ privileged aspect PurchaseOrder_Roo_JavaBean {
     
     public void PurchaseOrder.setConstructionSite(String constructionSite) {
         this.constructionSite = constructionSite;
-    }
-    
-    public int PurchaseOrder.getIdentifier() {
-        return this.identifier;
-    }
-    
-    public void PurchaseOrder.setIdentifier(int identifier) {
-        this.identifier = identifier;
     }
     
     public HireRequestStatus PurchaseOrder.getStatus() {
