@@ -38,6 +38,7 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
         setConstructionSite(obj, index);
         setEndDate(obj, index);
         setPlant(obj, index);
+        setSiteEngineer(obj, index);
         setStartDate(obj, index);
         setStatus(obj, index);
         setTotalCost(obj, index);
@@ -57,6 +58,11 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
     public void PurchaseOrderDataOnDemand.setPlant(PurchaseOrder obj, int index) {
         Plant plant = plantDataOnDemand.getSpecificPlant(index);
         obj.setPlant(plant);
+    }
+    
+    public void PurchaseOrderDataOnDemand.setSiteEngineer(PurchaseOrder obj, int index) {
+        String siteEngineer = "siteEngineer_" + index;
+        obj.setSiteEngineer(siteEngineer);
     }
     
     public void PurchaseOrderDataOnDemand.setStartDate(PurchaseOrder obj, int index) {

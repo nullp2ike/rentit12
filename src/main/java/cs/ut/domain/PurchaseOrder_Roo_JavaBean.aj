@@ -43,6 +43,14 @@ privileged aspect PurchaseOrder_Roo_JavaBean {
         this.constructionSite = constructionSite;
     }
     
+    public String PurchaseOrder.getSiteEngineer() {
+        return this.siteEngineer;
+    }
+    
+    public void PurchaseOrder.setSiteEngineer(String siteEngineer) {
+        this.siteEngineer = siteEngineer;
+    }
+    
     public HireRequestStatus PurchaseOrder.getStatus() {
         return this.status;
     }

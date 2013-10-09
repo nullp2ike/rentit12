@@ -43,6 +43,11 @@ public class PurchaseOrder {
      */
     @NotNull
     private String constructionSite;
+    
+    /**
+     */
+    @NotNull
+    private String siteEngineer;
 
     /**
      */
