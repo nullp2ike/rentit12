@@ -56,7 +56,7 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
     }
     
     public void PurchaseOrderDataOnDemand.setPlant(PurchaseOrder obj, int index) {
-        Plant plant = plantDataOnDemand.getSpecificPlant(index);
+        Plant plant = plantDataOnDemand.getRandomPlant();
         obj.setPlant(plant);
     }
     

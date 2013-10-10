@@ -9,7 +9,7 @@
             <table:column id="c_cs_ut_domain_PurchaseOrder_constructionSite" property="constructionSite" z="pCp8KAHepXEFbX7RqX3ZKPrk0aY="/>
             <table:column id="c_cs_ut_domain_PurchaseOrder_status" property="status" z="1WpmV+4WiHva6AVw51E7GfFYmXo="/>
             <table:column id="c_cs_ut_domain_PurchaseOrder_totalCost" property="totalCost" z="AXWb7FRr11P5P+EveIpUwHq8ohE="/>
-            <table:column id="c_cs_ut_domain_PurchaseOrder_plant" property="plant" z="Rc1f/bOpT78LiPPLIEKuw4w+JE0="/>
+            <table:column id="c_cs_ut_domain_PurchaseOrder_siteEngineer" property="siteEngineer" z="o6sPaEu4BiyO6bymzB8tYm7szk0="/>
         </table:table>
     </page:list>
 </div>

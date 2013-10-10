@@ -1,2 +1,8 @@
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-10 02:09:52
 perform tests
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-10 02:52:23
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-10 12:40:24
+entity jpa --class ~.domain.rest.PlantResource --testAutomatically
+perform tests
+entity jpa --class ~.domain.rest.PlantResourceList --testAutomatically
+entity jpa --class ~.domain.rest.PlantResourceAssembler --testAutomatically

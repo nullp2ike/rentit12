@@ -6,6 +6,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -57,7 +58,7 @@ public class PurchaseOrder {
 
     /**
      */
-    @OneToOne
+    @ManyToOne
     @NotNull
     private Plant plant;
 }

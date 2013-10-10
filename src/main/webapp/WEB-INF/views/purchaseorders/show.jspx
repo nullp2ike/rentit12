@@ -9,5 +9,6 @@
         <field:display field="status" id="s_cs_ut_domain_PurchaseOrder_status" object="${purchaseorder}" z="sZLLQKwrr2EFOsos/FLKQTNQ9A0="/>
         <field:display field="plant" id="s_cs_ut_domain_PurchaseOrder_plant" object="${purchaseorder}" z="Ad68Yze/8jLlMU2AYyIZ894k9Vc="/>
         <field:display field="totalCost" id="s_cs_ut_domain_PurchaseOrder_totalCost" object="${purchaseorder}" z="zr6HsCn1ph46i+6BDfoa0Ob/Kaw="/>
+        <field:display field="siteEngineer" id="s_cs_ut_domain_PurchaseOrder_siteEngineer" object="${purchaseorder}" z="SvDIqVP0nEcKje/wCvDeUsx+YJQ="/>
     </page:show>
 </div>
