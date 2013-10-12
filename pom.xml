@@ -50,6 +50,11 @@
     </pluginRepositories>
     <dependencies>
         <!-- General dependencies for standard applications -->
+         <dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>1.17.1</version>
+		</dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

@@ -13,7 +13,7 @@ public class PlantResourceList {
 	
 	List<PlantResource> listOfPlantResources;
 	
-	public PlantResourceList() {
+	public PlantResourceList(){
 		
 	}
 	
