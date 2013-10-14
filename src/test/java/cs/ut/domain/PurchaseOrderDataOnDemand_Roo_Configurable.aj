@@ -3,7 +3,6 @@
 
 package cs.ut.domain;
 
-import cs.ut.domain.PurchaseOrderDataOnDemand;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect PurchaseOrderDataOnDemand_Roo_Configurable {

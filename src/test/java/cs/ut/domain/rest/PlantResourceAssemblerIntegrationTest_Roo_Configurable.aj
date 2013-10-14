@@ -3,7 +3,6 @@
 
 package cs.ut.domain.rest;
 
-import cs.ut.domain.rest.PlantResourceAssemblerIntegrationTest;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect PlantResourceAssemblerIntegrationTest_Roo_Configurable {

@@ -3,10 +3,11 @@
 
 package cs.ut.domain.rest;
 
+import cs.ut.domain.rest.PurchaseOrderResourceIntegrationTest;
 import org.springframework.beans.factory.annotation.Configurable;
 
-privileged aspect PlantResourceIntegrationTest_Roo_Configurable {
+privileged aspect PurchaseOrderResourceIntegrationTest_Roo_Configurable {
     
-    declare @type: PlantResourceIntegrationTest: @Configurable;
+    declare @type: PurchaseOrderResourceIntegrationTest: @Configurable;
     
 }

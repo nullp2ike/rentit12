@@ -3,11 +3,6 @@
 
 package cs.ut.domain;
 
-import cs.ut.domain.HireRequestStatus;
-import cs.ut.domain.Plant;
-import cs.ut.domain.PlantDataOnDemand;
-import cs.ut.domain.PurchaseOrder;
-import cs.ut.domain.PurchaseOrderDataOnDemand;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -17,8 +12,10 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

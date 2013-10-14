@@ -3,7 +3,6 @@
 
 package cs.ut.domain.rest;
 
-import cs.ut.domain.rest.PlantResourceDataOnDemand;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect PlantResourceDataOnDemand_Roo_Configurable {

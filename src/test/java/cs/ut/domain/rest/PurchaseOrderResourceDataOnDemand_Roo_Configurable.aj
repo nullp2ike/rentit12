@@ -5,8 +5,8 @@ package cs.ut.domain.rest;
 
 import org.springframework.beans.factory.annotation.Configurable;
 
-privileged aspect PlantResourceIntegrationTest_Roo_Configurable {
+privileged aspect PurchaseOrderResourceDataOnDemand_Roo_Configurable {
     
-    declare @type: PlantResourceIntegrationTest: @Configurable;
+    declare @type: PurchaseOrderResourceDataOnDemand: @Configurable;
     
 }
