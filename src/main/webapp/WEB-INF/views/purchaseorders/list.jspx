@@ -6,10 +6,9 @@
         <table:table data="${purchaseorders}" id="l_cs_ut_domain_PurchaseOrder" path="/purchaseorders" z="L8xaSvS8JjRSoXV34TWdZ7GQG1M=">
             <table:column date="true" dateTimePattern="${purchaseOrder_startdate_date_format}" id="c_cs_ut_domain_PurchaseOrder_startDate" property="startDate" z="r3TLFLXA6YcLHBhZlvC6cYx/I0M="/>
             <table:column date="true" dateTimePattern="${purchaseOrder_enddate_date_format}" id="c_cs_ut_domain_PurchaseOrder_endDate" property="endDate" z="IJSHH6tH7ANQSyOk/Gw4XzhlpGg="/>
-            <table:column id="c_cs_ut_domain_PurchaseOrder_constructionSite" property="constructionSite" z="pCp8KAHepXEFbX7RqX3ZKPrk0aY="/>
             <table:column id="c_cs_ut_domain_PurchaseOrder_status" property="status" z="1WpmV+4WiHva6AVw51E7GfFYmXo="/>
             <table:column id="c_cs_ut_domain_PurchaseOrder_totalCost" property="totalCost" z="AXWb7FRr11P5P+EveIpUwHq8ohE="/>
-            <table:column id="c_cs_ut_domain_PurchaseOrder_siteEngineer" property="siteEngineer" z="o6sPaEu4BiyO6bymzB8tYm7szk0="/>
+            <table:column id="c_cs_ut_domain_PurchaseOrder_plant" property="plant" z="Rc1f/bOpT78LiPPLIEKuw4w+JE0="/>
         </table:table>
     </page:list>
 </div>

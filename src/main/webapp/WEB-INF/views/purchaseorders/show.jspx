@@ -5,10 +5,8 @@
     <page:show id="ps_cs_ut_domain_PurchaseOrder" object="${purchaseorder}" path="/purchaseorders" z="1WeQqBhXIs7/EsUgWXYtgrlCNWc=">
         <field:display date="true" dateTimePattern="${purchaseOrder_startdate_date_format}" field="startDate" id="s_cs_ut_domain_PurchaseOrder_startDate" object="${purchaseorder}" z="tdcUs2QnemVDvjvSrNaDXudz564="/>
         <field:display date="true" dateTimePattern="${purchaseOrder_enddate_date_format}" field="endDate" id="s_cs_ut_domain_PurchaseOrder_endDate" object="${purchaseorder}" z="kQ3LfBkrdTkt8IhI2RjZG0cEnPs="/>
-        <field:display field="constructionSite" id="s_cs_ut_domain_PurchaseOrder_constructionSite" object="${purchaseorder}" z="MVq15Kz/mLJr05s1JDaNYUwSdag="/>
         <field:display field="status" id="s_cs_ut_domain_PurchaseOrder_status" object="${purchaseorder}" z="sZLLQKwrr2EFOsos/FLKQTNQ9A0="/>
         <field:display field="totalCost" id="s_cs_ut_domain_PurchaseOrder_totalCost" object="${purchaseorder}" z="zr6HsCn1ph46i+6BDfoa0Ob/Kaw="/>
-        <field:display field="siteEngineer" id="s_cs_ut_domain_PurchaseOrder_siteEngineer" object="${purchaseorder}" z="SvDIqVP0nEcKje/wCvDeUsx+YJQ="/>
         <field:display field="plant" id="s_cs_ut_domain_PurchaseOrder_plant" object="${purchaseorder}" z="Ad68Yze/8jLlMU2AYyIZ894k9Vc="/>
     </page:show>
 </div>

@@ -3,6 +3,11 @@
 
 package cs.ut.domain;
 
+import cs.ut.domain.HireRequestStatus;
+import cs.ut.domain.Plant;
+import cs.ut.domain.PlantDataOnDemand;
+import cs.ut.domain.PurchaseOrder;
+import cs.ut.domain.PurchaseOrderDataOnDemand;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -12,10 +17,8 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,19 +35,12 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
     
     public PurchaseOrder PurchaseOrderDataOnDemand.getNewTransientPurchaseOrder(int index) {
         PurchaseOrder obj = new PurchaseOrder();
-        setConstructionSite(obj, index);
         setEndDate(obj, index);
         setPlant(obj, index);
-        setSiteEngineer(obj, index);
         setStartDate(obj, index);
         setStatus(obj, index);
         setTotalCost(obj, index);
         return obj;
-    }
-    
-    public void PurchaseOrderDataOnDemand.setConstructionSite(PurchaseOrder obj, int index) {
-        String constructionSite = "constructionSite_" + index;
-        obj.setConstructionSite(constructionSite);
     }
     
     public void PurchaseOrderDataOnDemand.setEndDate(PurchaseOrder obj, int index) {
@@ -55,11 +51,6 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
     public void PurchaseOrderDataOnDemand.setPlant(PurchaseOrder obj, int index) {
         Plant plant = plantDataOnDemand.getRandomPlant();
         obj.setPlant(plant);
-    }
-    
-    public void PurchaseOrderDataOnDemand.setSiteEngineer(PurchaseOrder obj, int index) {
-        String siteEngineer = "siteEngineer_" + index;
-        obj.setSiteEngineer(siteEngineer);
     }
     
     public void PurchaseOrderDataOnDemand.setStartDate(PurchaseOrder obj, int index) {

@@ -25,10 +25,8 @@ public class PurchaseOrderResourceController {
 	@RequestMapping(method = RequestMethod.POST, value="/pos")
 	public ResponseEntity<Void> createPurchaseOrderResource(@RequestBody PurchaseOrderResource res) {
 			PurchaseOrder p = new PurchaseOrder();
-			p.setConstructionSite(res.getConstructionSite());
 			p.setEndDate(res.getEndDate());
 			p.setPlant(Plant.findPlant(res.getPlantId()));
-			p.setSiteEngineer(res.getSiteEngineer());
 			p.setStartDate(res.getStartDate());
 			p.setStatus(res.getStatus());
 			p.setTotalCost(res.getTotalCost());
@@ -43,10 +41,8 @@ public class PurchaseOrderResourceController {
 	@RequestMapping(method = RequestMethod.PUT, value="/pos/{id}")
 	public ResponseEntity<Void> updatePurchaseOrderResourceById(@PathVariable("id") Long id, @RequestBody PurchaseOrderResource res) {
 			PurchaseOrder p = PurchaseOrder.findPurchaseOrder(id);
-			p.setConstructionSite(res.getConstructionSite());
 			p.setEndDate(res.getEndDate());
 			p.setPlant(Plant.findPlant(res.getPlantId()));
-			p.setSiteEngineer(res.getSiteEngineer());
 			p.setStartDate(res.getStartDate());
 			p.setStatus(res.getStatus());
 			p.setTotalCost(res.getTotalCost());

@@ -21,10 +21,6 @@ public class PurchaseOrderResource {
 
     private BigDecimal totalCost;
 
-    private String constructionSite;
-    
-    private String siteEngineer;
-
     private HireRequestStatus status;
 
     private long plantId;

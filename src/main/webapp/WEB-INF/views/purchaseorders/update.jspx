@@ -5,10 +5,8 @@
     <form:update id="fu_cs_ut_domain_PurchaseOrder" modelAttribute="purchaseOrder" path="/purchaseorders" versionField="Version" z="t5RITcmRup396FKOHyit1gN16WU=">
         <field:datetime dateTimePattern="${purchaseOrder_startdate_date_format}" field="startDate" id="c_cs_ut_domain_PurchaseOrder_startDate" required="true" z="OKSEEVW+01mLncAt8Lq/qxoZ9a8="/>
         <field:datetime dateTimePattern="${purchaseOrder_enddate_date_format}" field="endDate" id="c_cs_ut_domain_PurchaseOrder_endDate" required="true" z="+w8gUWu+3SQauYswHUoFrIiLDjw="/>
-        <field:input field="constructionSite" id="c_cs_ut_domain_PurchaseOrder_constructionSite" required="true" z="YHyzFcwgjnGHbGd8RU9obPx8aW8="/>
         <field:select field="status" id="c_cs_ut_domain_PurchaseOrder_status" items="${hirerequeststatuses}" path="hirerequeststatuses" required="true" z="ewDEBr362/ro9AzC8gP+n8muL6Y="/>
         <field:input field="totalCost" id="c_cs_ut_domain_PurchaseOrder_totalCost" required="true" validationMessageCode="field_invalid_number" z="clk4Uq3zKbHnVWJEUqZwjipGPaA="/>
-        <field:input field="siteEngineer" id="c_cs_ut_domain_PurchaseOrder_siteEngineer" required="true" z="yuTnUDerV4yq1yN0kVhQyApnmks="/>
         <field:select field="plant" id="c_cs_ut_domain_PurchaseOrder_plant" itemValue="id" items="${plants}" path="/plants" required="true" z="5WabfAOPEyiDIFudjAiaqeTEKZ8="/>
     </form:update>
 </div>

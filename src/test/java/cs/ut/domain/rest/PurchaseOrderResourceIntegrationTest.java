@@ -50,15 +50,13 @@ public class PurchaseOrderResourceIntegrationTest {
 		return id;
 	}
 
-	private ClientResponse createPurchaseOrder(String constructionSiteName) {
+	private ClientResponse createPurchaseOrder(int totalPrice) {
 		WebResource webResource = client.resource(resourcePath + "/pos");
 		PurchaseOrderResource poResource = new PurchaseOrderResource();
-		poResource.setConstructionSite(constructionSiteName);
 		poResource.setEndDate(new Date());
 		poResource.setPlantId(1);
-		poResource.setSiteEngineer("Eng");
 		poResource.setStartDate(new Date());
-		poResource.setTotalCost(new BigDecimal(100));
+		poResource.setTotalCost(new BigDecimal(totalPrice));
 		poResource.setStatus(HireRequestStatus.PENDING);
 
 		ClientResponse clientResponse = webResource
@@ -70,19 +68,19 @@ public class PurchaseOrderResourceIntegrationTest {
 
 	@Test
 	public void testCreateNewPurchaseOrderViaRest() {
-		ClientResponse postResponse = createPurchaseOrder("CreateNewPoSite");
+		ClientResponse postResponse = createPurchaseOrder(1);
 		assertTrue(postResponse.getStatus() == Status.CREATED.getStatusCode());
 		String poId = getIdFromLocation(postResponse.getLocation());
 		WebResource webResource = client.resource(resourcePath + "/pos/" + poId);
     	ClientResponse response = webResource.type(MediaType.APPLICATION_XML)
     			.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
     	PurchaseOrderResource poResource = response.getEntity(PurchaseOrderResource.class);
-    	assertTrue(poResource.getConstructionSite().equals("CreateNewPoSite"));
+    	assertTrue(poResource.getTotalCost().intValue() == 1);
 	}
 
 	@Test
 	public void testGetPurchaseOrderByIdViaRest() {
-		ClientResponse clientResp = createPurchaseOrder("GetPoByIdSite");
+		ClientResponse clientResp = createPurchaseOrder(2);
 		String id = getIdFromLocation(clientResp.getLocation());
 		WebResource webResource = client.resource(resourcePath + "/pos/" + id);
 		ClientResponse clientResponse = webResource
@@ -91,12 +89,12 @@ public class PurchaseOrderResourceIntegrationTest {
 		assertTrue(clientResponse.getStatus() == Status.OK.getStatusCode());
 		PurchaseOrderResource poResource = clientResponse
 				.getEntity(PurchaseOrderResource.class);
-		assertTrue(poResource.getConstructionSite().equals("GetPoByIdSite"));
+		assertTrue(poResource.getTotalCost().intValue() == 2);
 	}
 
 	@Test
 	public void testCancelPurchaseOderViaRest() {
-		ClientResponse clientResp = createPurchaseOrder("TestCancelPOSite");
+		ClientResponse clientResp = createPurchaseOrder(3);
 		String id = getIdFromLocation(clientResp.getLocation());
 		WebResource webResource = client.resource(resourcePath + "/pos/" + id + "/status");
 		
@@ -123,17 +121,15 @@ public class PurchaseOrderResourceIntegrationTest {
 
 	@Test
 	public void testUpdatePurchaseOrderViaRest() {
-		ClientResponse clientResp = createPurchaseOrder("TestUpdatePOSite");
+		ClientResponse clientResp = createPurchaseOrder(4);
 		String id = getIdFromLocation(clientResp.getLocation());
 		WebResource webResource = client.resource(resourcePath + "/pos/" + id);
 		
 		PurchaseOrderResource poResource = new PurchaseOrderResource();
-		poResource.setSiteEngineer("SiteEngUpdated");
-		poResource.setConstructionSite("TestUpdatePOSite");
 		poResource.setEndDate(new Date());
 		poResource.setPlantId(1);
 		poResource.setStartDate(new Date());
-		poResource.setTotalCost(new BigDecimal(100));
+		poResource.setTotalCost(new BigDecimal(4));
 		poResource.setStatus(HireRequestStatus.PENDING);
 
 		ClientResponse postResponse = webResource
@@ -150,7 +146,7 @@ public class PurchaseOrderResourceIntegrationTest {
 		
 		PurchaseOrderResource poResourceUpdated = clientResponseAfterUpdate
 				.getEntity(PurchaseOrderResource.class);
-		assertTrue(poResourceUpdated.getSiteEngineer().equals("SiteEngUpdated"));
+		assertTrue(poResourceUpdated.getTotalCost().intValue() == 4);
 		
 	}
 }

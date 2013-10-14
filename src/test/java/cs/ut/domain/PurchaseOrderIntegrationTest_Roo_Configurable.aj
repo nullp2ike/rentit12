@@ -3,6 +3,7 @@
 
 package cs.ut.domain;
 
+import cs.ut.domain.PurchaseOrderIntegrationTest;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect PurchaseOrderIntegrationTest_Roo_Configurable {

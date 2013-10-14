@@ -3,12 +3,13 @@
 
 package cs.ut.domain;
 
+import cs.ut.domain.Plant;
+import cs.ut.domain.PlantDataOnDemand;
+import cs.ut.domain.PlantIntegrationTest;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

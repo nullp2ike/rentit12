@@ -42,16 +42,6 @@ public class PurchaseOrder {
 
     /**
      */
-    @NotNull
-    private String constructionSite;
-    
-    /**
-     */
-    @NotNull
-    private String siteEngineer;
-
-    /**
-     */
     @Enumerated
     @NotNull
     private HireRequestStatus status;

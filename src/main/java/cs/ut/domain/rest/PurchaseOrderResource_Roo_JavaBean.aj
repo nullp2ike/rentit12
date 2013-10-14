@@ -34,22 +34,6 @@ privileged aspect PurchaseOrderResource_Roo_JavaBean {
         this.totalCost = totalCost;
     }
     
-    public String PurchaseOrderResource.getConstructionSite() {
-        return this.constructionSite;
-    }
-    
-    public void PurchaseOrderResource.setConstructionSite(String constructionSite) {
-        this.constructionSite = constructionSite;
-    }
-    
-    public String PurchaseOrderResource.getSiteEngineer() {
-        return this.siteEngineer;
-    }
-    
-    public void PurchaseOrderResource.setSiteEngineer(String siteEngineer) {
-        this.siteEngineer = siteEngineer;
-    }
-    
     public HireRequestStatus PurchaseOrderResource.getStatus() {
         return this.status;
     }
