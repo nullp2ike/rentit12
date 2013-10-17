@@ -27,7 +27,7 @@ public class PlantResourceListIntegrationTest {
     @Test
     public void testListAllPlantstViaRest(){
     	
-    	WebResource webResource = client.resource("http://localhost:8080/Rentit/rest/plant");
+    	WebResource webResource = client.resource("http://rentit12.herokuapp.com/rest/plant");
     	
     	PlantResource newPlantResource = new PlantResource();
     	newPlantResource.setDescription("Dodge 2013");

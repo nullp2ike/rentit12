@@ -54,7 +54,7 @@ public class PurchaseOrderResourceController {
 			return response;
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value="/pos/{id}/status")
+	@RequestMapping(method = RequestMethod.PUT, value="/pos/{id}/cancel")
 	public ResponseEntity<Void> updatePurchaseOrderResourceById(@PathVariable("id") Long id, @RequestBody PurchaseOrderStatusResource res) {
 			PurchaseOrder p = PurchaseOrder.findPurchaseOrder(id);
 			p.setStatus(res.getStatus());

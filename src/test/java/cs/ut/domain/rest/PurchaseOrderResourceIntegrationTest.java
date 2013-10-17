@@ -18,30 +18,32 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.WebResource;
 
 import cs.ut.domain.HireRequestStatus;
+import cs.ut.domain.Plant;
+import cs.ut.domain.PurchaseOrder;
 
 @RooIntegrationTest(entity = PurchaseOrderResource.class)
 public class PurchaseOrderResourceIntegrationTest {
 
 	Client client;
 	String resourcePath;
+	long plantId;
 
 	@Before
 	public void setUp() {
-		resourcePath = "http://localhost:8080/Rentit/rest";
+		//resourcePath = "http://localhost:8080/Rentit/rest";
+		resourcePath = "http://rentit12.herokuapp.com/rest";
 		client = Client.create();
 		createPlant();
 	}
 
 	private void createPlant() {
-		WebResource webResource = client.resource(resourcePath + "/plant");
-		PlantResource plantResource = new PlantResource();
-		plantResource.setDescription("Dodge 2013");
-		plantResource.setPlantName("Truck");
-		plantResource.setPricePerDay(new BigDecimal(200));
-
-		webResource.type(MediaType.APPLICATION_XML)
-				.accept(MediaType.APPLICATION_XML)
-				.post(ClientResponse.class, plantResource);
+		Plant p = new Plant();
+		p.setDescription("Dodge 2013");
+		p.setName("Truck");
+		p.setPricePerDay(new BigDecimal(200));
+		p.persist();
+		p.flush();
+		plantId = p.getId();
 	}
 
 	private String getIdFromLocation(URI location) {
@@ -49,12 +51,25 @@ public class PurchaseOrderResourceIntegrationTest {
 		String id = locationStr.substring(locationStr.lastIndexOf("/"));
 		return id;
 	}
+	
+	private long createPO(){
+		PurchaseOrder po = new PurchaseOrder();
+		po.setEndDate(new Date());
+		po.setPlant(Plant.findPlant(plantId));
+		po.setStartDate(new Date());
+		po.setStatus(HireRequestStatus.PENDING);
+		po.setTotalCost(new BigDecimal(2));
+		po.persist();
+		po.flush();
+		long id = po.getId();
+		return id;
+	}
 
 	private ClientResponse createPurchaseOrder(int totalPrice) {
 		WebResource webResource = client.resource(resourcePath + "/pos");
 		PurchaseOrderResource poResource = new PurchaseOrderResource();
 		poResource.setEndDate(new Date());
-		poResource.setPlantId(1);
+		poResource.setPlantId(plantId);
 		poResource.setStartDate(new Date());
 		poResource.setTotalCost(new BigDecimal(totalPrice));
 		poResource.setStatus(HireRequestStatus.PENDING);
@@ -80,8 +95,7 @@ public class PurchaseOrderResourceIntegrationTest {
 
 	@Test
 	public void testGetPurchaseOrderByIdViaRest() {
-		ClientResponse clientResp = createPurchaseOrder(2);
-		String id = getIdFromLocation(clientResp.getLocation());
+		long id = createPO();
 		WebResource webResource = client.resource(resourcePath + "/pos/" + id);
 		ClientResponse clientResponse = webResource
 				.type(MediaType.APPLICATION_XML)
@@ -94,11 +108,10 @@ public class PurchaseOrderResourceIntegrationTest {
 
 	@Test
 	public void testCancelPurchaseOderViaRest() {
-		ClientResponse clientResp = createPurchaseOrder(3);
-		String id = getIdFromLocation(clientResp.getLocation());
-		WebResource webResource = client.resource(resourcePath + "/pos/" + id + "/status");
+		long id = createPO();
+		WebResource webResource = client.resource(resourcePath + "/pos/" + id + "/cancel");
 		
-		PurchaseOrderResource poResource = new PurchaseOrderResource();
+		PurchaseOrderStatusResource poResource = new PurchaseOrderStatusResource();
 		poResource.setStatus(HireRequestStatus.REJECTED);
 
 		ClientResponse clientResponse = webResource
@@ -107,15 +120,7 @@ public class PurchaseOrderResourceIntegrationTest {
 				.put(ClientResponse.class, poResource);
 		assertTrue(clientResponse.getStatus() == Status.OK.getStatusCode());
 		
-		webResource = client.resource(resourcePath + "/pos/" + id);
-		
-		ClientResponse clientResponseAfterCancel = webResource
-				.type(MediaType.APPLICATION_XML)
-				.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
-		
-		PurchaseOrderResource poResourceCanceled = clientResponseAfterCancel
-				.getEntity(PurchaseOrderResource.class);
-		assertTrue(poResourceCanceled.getStatus().equals(HireRequestStatus.REJECTED));
+		assertTrue(PurchaseOrder.findPurchaseOrder(id).getStatus().equals(HireRequestStatus.REJECTED));
 
 	}
 
