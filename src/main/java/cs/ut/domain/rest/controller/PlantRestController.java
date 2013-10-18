@@ -21,7 +21,7 @@ import cs.ut.domain.rest.PlantResourceList;
 
 @Controller
 @RequestMapping("/rest")
-public class PlantResourceController {
+public class PlantRestController {
 	
 	@RequestMapping("/plant/{id}")
 	public ResponseEntity<PlantResource> getPlant(@PathVariable("id") Long id){

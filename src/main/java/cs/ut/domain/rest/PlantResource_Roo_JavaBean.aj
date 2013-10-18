@@ -32,4 +32,12 @@ privileged aspect PlantResource_Roo_JavaBean {
         this.description = description;
     }
     
+    public long PlantResource.getIdentifier() {
+        return this.identifier;
+    }
+    
+    public void PlantResource.setIdentifier(long identifier) {
+        this.identifier = identifier;
+    }
+    
 }

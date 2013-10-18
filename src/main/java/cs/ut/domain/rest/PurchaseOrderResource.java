@@ -1,5 +1,6 @@
 package cs.ut.domain.rest;
 import java.math.BigDecimal;
+import cs.ut.util.ResourceSupport;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -13,7 +14,7 @@ import cs.ut.domain.Plant;
 @RooJavaBean
 @RooToString
 @XmlRootElement(name = "purchaseOrder")
-public class PurchaseOrderResource {
+public class PurchaseOrderResource extends ResourceSupport {
 	
     private Date startDate;
 
@@ -23,5 +24,5 @@ public class PurchaseOrderResource {
 
     private HireRequestStatus status;
 
-    private long plantId;
+    private PlantResource plantResource;
 }

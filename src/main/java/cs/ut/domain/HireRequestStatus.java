@@ -2,5 +2,5 @@ package cs.ut.domain;
 
 public enum HireRequestStatus {
 
-	PENDING, APPROVED, REJECTED
+	PENDING_CONFIRMATION, OPEN, PENDING_UPDATE, CLOSED, REJECTED
 }

@@ -4,6 +4,7 @@
 package cs.ut.domain.rest;
 
 import cs.ut.domain.HireRequestStatus;
+import cs.ut.domain.rest.PlantResource;
 import cs.ut.domain.rest.PurchaseOrderResource;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -42,12 +43,12 @@ privileged aspect PurchaseOrderResource_Roo_JavaBean {
         this.status = status;
     }
     
-    public long PurchaseOrderResource.getPlantId() {
-        return this.plantId;
+    public PlantResource PurchaseOrderResource.getPlantResource() {
+        return this.plantResource;
     }
     
-    public void PurchaseOrderResource.setPlantId(long plantId) {
-        this.plantId = plantId;
+    public void PurchaseOrderResource.setPlantResource(PlantResource plantResource) {
+        this.plantResource = plantResource;
     }
     
 }

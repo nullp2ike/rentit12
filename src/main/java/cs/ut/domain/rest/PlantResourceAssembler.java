@@ -17,6 +17,7 @@ public class PlantResourceAssembler {
 		plantResource.setDescription(plant.getDescription());
 		plantResource.setPlantName(plant.getName());
 		plantResource.setPricePerDay(plant.getPricePerDay());
+		plantResource.setIdentifier(plant.getId());
 		return plantResource;
 	}
 	

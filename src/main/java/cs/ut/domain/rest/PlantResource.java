@@ -14,5 +14,6 @@ public class PlantResource {
 	private String plantName;
     private BigDecimal pricePerDay;
     private String description;
+    private long identifier;
     
 }

@@ -60,12 +60,12 @@ public class PurchaseOrderResourceIntegrationTest {
 		return id;
 	}
 	
-	private long createPO(){
+	private long createPO(HireRequestStatus status){
 		PurchaseOrder po = new PurchaseOrder();
 		po.setEndDate(new Date());
 		po.setPlant(Plant.findPlant(plantId));
 		po.setStartDate(new Date());
-		po.setStatus(HireRequestStatus.PENDING);
+		po.setStatus(status);
 		po.setTotalCost(new BigDecimal(2));
 		po.persist();
 		po.flush();
@@ -77,10 +77,11 @@ public class PurchaseOrderResourceIntegrationTest {
 		WebResource webResource = client.resource(app_url + "/rest/pos");
 		PurchaseOrderResource poResource = new PurchaseOrderResource();
 		poResource.setEndDate(new Date());
-		poResource.setPlantId(plantId);
+		PlantResourceAssembler assembler = new PlantResourceAssembler();
+		poResource.setPlantResource(assembler.getPlantResource(Plant.findPlant(plantId)));
 		poResource.setStartDate(new Date());
 		poResource.setTotalCost(new BigDecimal(totalPrice));
-		poResource.setStatus(HireRequestStatus.PENDING);
+		poResource.setStatus(HireRequestStatus.PENDING_CONFIRMATION);
 
 		ClientResponse clientResponse = webResource
 				.type(MediaType.APPLICATION_XML)
@@ -101,22 +102,10 @@ public class PurchaseOrderResourceIntegrationTest {
     	assertTrue(poResource.getTotalCost().intValue() == 1);
 	}
 
-	@Test
-	public void testGetPurchaseOrderByIdViaRest() {
-		long id = createPO();
-		WebResource webResource = client.resource(app_url + "/rest/pos/" + id);
-		ClientResponse clientResponse = webResource
-				.type(MediaType.APPLICATION_XML)
-				.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
-		assertTrue(clientResponse.getStatus() == Status.OK.getStatusCode());
-		PurchaseOrderResource poResource = clientResponse
-				.getEntity(PurchaseOrderResource.class);
-		assertTrue(poResource.getTotalCost().intValue() == 2);
-	}
 
 	@Test
 	public void testCancelPurchaseOderViaRest() {
-		long id = createPO();
+		long id = createPO(HireRequestStatus.PENDING_CONFIRMATION);
 		WebResource webResource = client.resource(app_url + "/rest/pos/" + id + "/cancel");
 		
 		PurchaseOrderStatusResource poResource = new PurchaseOrderStatusResource();
@@ -140,10 +129,11 @@ public class PurchaseOrderResourceIntegrationTest {
 		
 		PurchaseOrderResource poResource = new PurchaseOrderResource();
 		poResource.setEndDate(new Date());
-		poResource.setPlantId(1);
+		PlantResourceAssembler assembler = new PlantResourceAssembler();
+		poResource.setPlantResource(assembler.getPlantResource(Plant.findPlant(plantId)));
 		poResource.setStartDate(new Date());
 		poResource.setTotalCost(new BigDecimal(4));
-		poResource.setStatus(HireRequestStatus.PENDING);
+		poResource.setStatus(HireRequestStatus.PENDING_CONFIRMATION);
 
 		ClientResponse postResponse = webResource
 				.type(MediaType.APPLICATION_XML)
@@ -160,6 +150,42 @@ public class PurchaseOrderResourceIntegrationTest {
 		PurchaseOrderResource poResourceUpdated = clientResponseAfterUpdate
 				.getEntity(PurchaseOrderResource.class);
 		assertTrue(poResourceUpdated.getTotalCost().intValue() == 4);
-		
+	}
+	
+	@Test
+	public void testGetPO(){
+		long id = createPO(HireRequestStatus.PENDING_CONFIRMATION);
+		WebResource webResource = client.resource(app_url + "/rest/pos/" + id);
+		ClientResponse clientResponse = webResource
+				.type(MediaType.APPLICATION_XML)
+				.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
+		assertTrue(clientResponse.getStatus() == Status.OK.getStatusCode());
+		PurchaseOrderResource poResource = clientResponse
+				.getEntity(PurchaseOrderResource.class);
+		assertTrue(poResource.getTotalCost().intValue() == 2);
+	}
+	
+	@Test 
+	public void testAcceptPO(){
+		long id = createPO(HireRequestStatus.PENDING_CONFIRMATION);
+		WebResource webResource = client.resource(app_url + "/rest/pos/" + id + "/accept");
+		ClientResponse clientResponse = webResource
+				.type(MediaType.APPLICATION_XML)
+				.accept(MediaType.APPLICATION_XML).post(ClientResponse.class);
+		assertTrue(clientResponse.getStatus() == Status.OK.getStatusCode());
+		HireRequestStatus status = PurchaseOrder.findPurchaseOrder(id).getStatus();
+		assertTrue(status.equals(HireRequestStatus.OPEN));
+	}
+	
+	@Test 
+	public void testRejectPO(){
+		long id = createPO(HireRequestStatus.PENDING_CONFIRMATION);
+		WebResource webResource = client.resource(app_url + "/rest/pos/" + id + "/reject");
+		ClientResponse clientResponse = webResource
+				.type(MediaType.APPLICATION_XML)
+				.accept(MediaType.APPLICATION_XML).post(ClientResponse.class);
+		assertTrue(clientResponse.getStatus() == Status.OK.getStatusCode());
+		HireRequestStatus status = PurchaseOrder.findPurchaseOrder(id).getStatus();
+		assertTrue(status.equals(HireRequestStatus.REJECTED));
 	}
 }
