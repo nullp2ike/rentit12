@@ -23,7 +23,7 @@ import cs.ut.domain.rest.PurchaseOrderStatusResource;
 public class PurchaseOrderResourceController {
 	
 	@RequestMapping(method = RequestMethod.POST, value="/pos")
-	public ResponseEntity<Void> createPurchaseOrderResource(@RequestBody PurchaseOrderResource res) {
+	public ResponseEntity<Void> createPurchaseOrder(@RequestBody PurchaseOrderResource res) {
 			PurchaseOrder p = new PurchaseOrder();
 			p.setEndDate(res.getEndDate());
 			p.setPlant(Plant.findPlant(res.getPlantId()));
@@ -39,7 +39,7 @@ public class PurchaseOrderResourceController {
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value="/pos/{id}")
-	public ResponseEntity<Void> updatePurchaseOrderResourceById(@PathVariable("id") Long id, @RequestBody PurchaseOrderResource res) {
+	public ResponseEntity<Void> updatePurchaseOrder(@PathVariable("id") Long id, @RequestBody PurchaseOrderResource res) {
 			PurchaseOrder p = PurchaseOrder.findPurchaseOrder(id);
 			p.setEndDate(res.getEndDate());
 			p.setPlant(Plant.findPlant(res.getPlantId()));
@@ -55,7 +55,7 @@ public class PurchaseOrderResourceController {
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value="/pos/{id}/cancel")
-	public ResponseEntity<Void> updatePurchaseOrderResourceById(@PathVariable("id") Long id, @RequestBody PurchaseOrderStatusResource res) {
+	public ResponseEntity<Void> cancelPurchaseOrder(@PathVariable("id") Long id, @RequestBody PurchaseOrderStatusResource res) {
 			PurchaseOrder p = PurchaseOrder.findPurchaseOrder(id);
 			p.setStatus(res.getStatus());
 			p.persist();
@@ -67,7 +67,7 @@ public class PurchaseOrderResourceController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/pos/{id}")
-	public ResponseEntity<PurchaseOrderResource> getPurchaseOrderResourceByID(@PathVariable("id") Long id) {
+	public ResponseEntity<PurchaseOrderResource> getPurchaseOrder(@PathVariable("id") Long id) {
 			PurchaseOrder po = PurchaseOrder.findPurchaseOrder(id);
 			PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
 			PurchaseOrderResource poRes = assembler.getPurchaseOrderResource(po);

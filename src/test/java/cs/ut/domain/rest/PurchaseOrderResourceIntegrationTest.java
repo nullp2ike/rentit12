@@ -2,14 +2,19 @@ package cs.ut.domain.rest;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.ws.rs.core.MediaType;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.roo.addon.test.RooIntegrationTest;
 
 import com.sun.jersey.api.client.Client;
@@ -18,6 +23,7 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.WebResource;
 
 import cs.ut.domain.HireRequestStatus;
+import cs.ut.domain.LoadTestProperties;
 import cs.ut.domain.Plant;
 import cs.ut.domain.PurchaseOrder;
 
@@ -25,15 +31,17 @@ import cs.ut.domain.PurchaseOrder;
 public class PurchaseOrderResourceIntegrationTest {
 
 	Client client;
-	String resourcePath;
+
+	private String app_url;
 	long plantId;
 
 	@Before
 	public void setUp() {
-		//resourcePath = "http://localhost:8080/Rentit/rest";
-		resourcePath = "http://rentit12.herokuapp.com/rest";
+		
 		client = Client.create();
 		createPlant();
+		LoadTestProperties props = new LoadTestProperties();
+		app_url = props.loadProperty("webappurl");
 	}
 
 	private void createPlant() {
@@ -66,7 +74,7 @@ public class PurchaseOrderResourceIntegrationTest {
 	}
 
 	private ClientResponse createPurchaseOrder(int totalPrice) {
-		WebResource webResource = client.resource(resourcePath + "/pos");
+		WebResource webResource = client.resource(app_url + "/rest/pos");
 		PurchaseOrderResource poResource = new PurchaseOrderResource();
 		poResource.setEndDate(new Date());
 		poResource.setPlantId(plantId);
@@ -86,7 +94,7 @@ public class PurchaseOrderResourceIntegrationTest {
 		ClientResponse postResponse = createPurchaseOrder(1);
 		assertTrue(postResponse.getStatus() == Status.CREATED.getStatusCode());
 		String poId = getIdFromLocation(postResponse.getLocation());
-		WebResource webResource = client.resource(resourcePath + "/pos/" + poId);
+		WebResource webResource = client.resource(app_url + "/rest/pos/" + poId);
     	ClientResponse response = webResource.type(MediaType.APPLICATION_XML)
     			.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
     	PurchaseOrderResource poResource = response.getEntity(PurchaseOrderResource.class);
@@ -96,7 +104,7 @@ public class PurchaseOrderResourceIntegrationTest {
 	@Test
 	public void testGetPurchaseOrderByIdViaRest() {
 		long id = createPO();
-		WebResource webResource = client.resource(resourcePath + "/pos/" + id);
+		WebResource webResource = client.resource(app_url + "/rest/pos/" + id);
 		ClientResponse clientResponse = webResource
 				.type(MediaType.APPLICATION_XML)
 				.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
@@ -109,7 +117,7 @@ public class PurchaseOrderResourceIntegrationTest {
 	@Test
 	public void testCancelPurchaseOderViaRest() {
 		long id = createPO();
-		WebResource webResource = client.resource(resourcePath + "/pos/" + id + "/cancel");
+		WebResource webResource = client.resource(app_url + "/rest/pos/" + id + "/cancel");
 		
 		PurchaseOrderStatusResource poResource = new PurchaseOrderStatusResource();
 		poResource.setStatus(HireRequestStatus.REJECTED);
@@ -128,7 +136,7 @@ public class PurchaseOrderResourceIntegrationTest {
 	public void testUpdatePurchaseOrderViaRest() {
 		ClientResponse clientResp = createPurchaseOrder(4);
 		String id = getIdFromLocation(clientResp.getLocation());
-		WebResource webResource = client.resource(resourcePath + "/pos/" + id);
+		WebResource webResource = client.resource(app_url + "/rest/pos/" + id);
 		
 		PurchaseOrderResource poResource = new PurchaseOrderResource();
 		poResource.setEndDate(new Date());
@@ -143,7 +151,7 @@ public class PurchaseOrderResourceIntegrationTest {
 				.put(ClientResponse.class, poResource);
 		assertTrue(postResponse.getStatus() == Status.OK.getStatusCode());
 		
-		webResource = client.resource(resourcePath + "/pos/" + id);
+		webResource = client.resource(app_url + "/rest/pos/" + id);
 		
 		ClientResponse clientResponseAfterUpdate = webResource
 				.type(MediaType.APPLICATION_XML)

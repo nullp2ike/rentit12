@@ -24,7 +24,7 @@ import cs.ut.domain.rest.PlantResourceList;
 public class PlantResourceController {
 	
 	@RequestMapping("/plant/{id}")
-	public ResponseEntity<PlantResource> getPlantResource(@PathVariable("id") Long id){
+	public ResponseEntity<PlantResource> getPlant(@PathVariable("id") Long id){
 		Plant p = Plant.findPlant(id);
 		PlantResourceAssembler assembler = new PlantResourceAssembler();
 		PlantResource res = assembler.getPlantResource(p);
@@ -32,21 +32,9 @@ public class PlantResourceController {
 		return response;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value="/plant")
-	public ResponseEntity<Void> createPlantResource(@RequestBody PlantResource res) {
-			Plant p = new Plant();
-			p.setDescription(res.getDescription());
-			p.setName(res.getPlantName());
-			p.setPricePerDay(res.getPricePerDay());
-			p.persist();
-			HttpHeaders headers = new HttpHeaders();
-			URI location = ServletUriComponentsBuilder.fromCurrentRequestUri().pathSegment(p.getId().toString()).build().toUri();
-			headers.setLocation(location);
-			ResponseEntity<Void> response = new ResponseEntity<>(headers, HttpStatus.CREATED);
-			return response;
-	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/plant")
-	public ResponseEntity<PlantResourceList> getPlantResourceList(){
+	public ResponseEntity<PlantResourceList> getPlantList(){
 		List<Plant> plantList = Plant.findAllPlants();
 		PlantResourceAssembler assembler = new PlantResourceAssembler();
 		PlantResourceList resList = assembler.getPlantResourceList(plantList);
