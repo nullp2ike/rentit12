@@ -20,10 +20,10 @@ import cs.ut.domain.rest.PlantResourceAssembler;
 import cs.ut.domain.rest.PlantResourceList;
 
 @Controller
-@RequestMapping("/rest")
+@RequestMapping("/rest/plant")
 public class PlantRestController {
 	
-	@RequestMapping("/plant/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<PlantResource> getPlant(@PathVariable("id") Long id){
 		Plant p = Plant.findPlant(id);
 		PlantResourceAssembler assembler = new PlantResourceAssembler();
@@ -33,7 +33,7 @@ public class PlantRestController {
 	}
 	
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/plant")
+	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public ResponseEntity<PlantResourceList> getPlantList(){
 		List<Plant> plantList = Plant.findAllPlants();
 		PlantResourceAssembler assembler = new PlantResourceAssembler();

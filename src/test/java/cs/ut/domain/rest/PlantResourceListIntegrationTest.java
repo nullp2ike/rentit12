@@ -53,12 +53,12 @@ public class PlantResourceListIntegrationTest extends AbstractJUnit4SpringContex
     }
     
     @Test
-    public void testListAllPlantstViaRest(){
+    public void testGetPlants(){
     	
     	createPlant("PlantResourceListTruck");
     	createPlant("PlantResourceListTruck2");
     	
-    	WebResource webResource = client.resource(app_url + "/rest/plant");
+    	WebResource webResource = client.resource(app_url + "/rest/plant/");
  
     	ClientResponse getResponse = webResource.type(MediaType.APPLICATION_XML)
     			.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);

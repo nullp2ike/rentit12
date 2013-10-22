@@ -19,6 +19,7 @@ public class PurchaseOrderResourceAssembler extends
 		por.setEndDate(po.getEndDate());
 		por.setStartDate(po.getStartDate());
 		por.setTotalCost(po.getTotalCost());
+		por.setStatus(po.getStatus());
 		PlantResource plantResource;
 		
 		if (po.getPlant() != null) {
@@ -28,8 +29,7 @@ public class PurchaseOrderResourceAssembler extends
 		}
 		return por;
 	}
-
-
+	
 	public PurchaseOrderResource getPurchaseOrderResource(
 			PurchaseOrder purchaseOrder) {
 		PurchaseOrderResource purchaseOrderResource = new PurchaseOrderResource();

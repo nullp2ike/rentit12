@@ -1,5 +1,4 @@
 package cs.ut.domain.rest;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
@@ -8,8 +7,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.roo.addon.test.RooIntegrationTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
@@ -25,8 +22,7 @@ import cs.ut.domain.Plant;
 @ContextConfiguration(locations = { "/META-INF/spring/applicationContext.xml" })
 @RooIntegrationTest(entity = PlantResource.class)
 public class PlantResourceIntegrationTest extends AbstractJUnit4SpringContextTests{
-	@Autowired
-	private Environment env;
+
 	private String app_url;
 	
 	Client client;
@@ -45,13 +41,12 @@ public class PlantResourceIntegrationTest extends AbstractJUnit4SpringContextTes
     	p.setDescription("Dodge 2012");
     	p.setPricePerDay(new BigDecimal(400));
     	p.persist();
-    	p.flush();
     	return p.getId();
     	
     }
     
     @Test
-    public void testQueryPlantViaRestById(){
+    public void testGetPlant(){
     	long id = createPlant();
     	WebResource webResource = client.resource(app_url + "/rest/plant/" + id);
     	ClientResponse response = webResource.type(MediaType.APPLICATION_XML)

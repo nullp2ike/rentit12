@@ -14,3 +14,11 @@ entity jpa --class ~.domain.rest.PurchaseOrderResource --testAutomatically
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-14 23:41:18
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-14 23:54:39
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-18 22:40:39
+entity jpa --class ~.domain.PurchaseOrderUpdate --testAutomatically
+focus --class ~.domain.PurchaseOrderUpdate
+field reference --fieldName plant --type ~.domain.Plant --cardinality MANY_TO_ONE 
+// [failed] field reference --fieldName plant --type ~.domain.PurchaseOrder --cardinality MANY_TO_ONE
+field reference --fieldName purchaseOrder --type ~.domain.PurchaseOrder --cardinality MANY_TO_ONE
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-21 09:31:06
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-10-21 21:42:48
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-10-21 21:47:12
