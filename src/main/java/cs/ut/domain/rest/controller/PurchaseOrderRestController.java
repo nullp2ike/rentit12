@@ -26,6 +26,56 @@ import cs.ut.util.ExtendedLink;
 @Controller
 @RequestMapping("/rest/pos/")
 public class PurchaseOrderRestController {
+	//OK
+	@RequestMapping(method = RequestMethod.POST, value = "")
+	public ResponseEntity<PurchaseOrderResource> createPO(@RequestBody PurchaseOrderResource res) {
+		PurchaseOrder po = new PurchaseOrder();
+		po.setEndDate(res.getEndDate());
+		po.setPlant(Plant.findPlant(res.getPlantResource().getIdentifier()));
+		po.setStartDate(res.getStartDate());
+		po.setStatus(HireRequestStatus.PENDING_CONFIRMATION);
+		po.setTotalCost(res.getTotalCost());
+		po.persist();
+		
+		PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
+		PurchaseOrderResource resource = assembler.toResource(po);
+		
+		try {
+			addMethodLink(po, resource, "acceptPO", "POST");
+			addMethodLink(po, resource, "rejectPO", "DELETE");
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequestUri()
+				.pathSegment(po.getId().toString()).build().toUri();
+		headers.setLocation(location);
+		ResponseEntity<PurchaseOrderResource> response = new ResponseEntity<PurchaseOrderResource>(resource, headers,
+				HttpStatus.CREATED);
+		return response;
+	}
+	
+	//OK
+	@RequestMapping(method = RequestMethod.DELETE, value = "{id}/reject")
+	public ResponseEntity<PurchaseOrderResource> rejectPO(@PathVariable("id") Long id) {
+		PurchaseOrder po = PurchaseOrder.findPurchaseOrder(id);
+		ResponseEntity<PurchaseOrderResource> response;
+		if (po.getStatus().equals(HireRequestStatus.PENDING_CONFIRMATION)) {
+			po.setStatus(HireRequestStatus.REJECTED);
+			po.persist();
+			PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
+			PurchaseOrderResource resource = assembler.toResource(po);
+			try {
+				addMethodLinkWithResource(po, resource, "updatePO", "PUT");
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+			response = new ResponseEntity<>(resource, HttpStatus.OK);
+		} else
+			response = new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+		return response;
+	}
 
 	//OK
 	@RequestMapping(method = RequestMethod.PUT, value = "{id}")
@@ -52,7 +102,6 @@ public class PurchaseOrderRestController {
 				addMethodLink(po, resource, "acceptPO", "POST");
 				addMethodLink(po, resource, "rejectPO", "DELETE");
 			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			response = new ResponseEntity<>(resource, HttpStatus.OK);
@@ -61,24 +110,9 @@ public class PurchaseOrderRestController {
 
 		return response;
 	}
-
+	
+	
 	//OK
-	@RequestMapping(method = RequestMethod.DELETE, value = "{id}")
-	public ResponseEntity<Void> closePO(
-			@PathVariable("id") Long id) {
-		PurchaseOrder p = PurchaseOrder.findPurchaseOrder(id);
-		p.setStatus(HireRequestStatus.CLOSED);
-		p.persist();
-		HttpHeaders headers = new HttpHeaders();
-		URI location = ServletUriComponentsBuilder.fromCurrentRequestUri()
-				.pathSegment(p.getId().toString()).build().toUri();
-		headers.setLocation(location);
-		ResponseEntity<Void> response = new ResponseEntity<>(headers,
-				HttpStatus.OK);
-		return response;
-	}
-
-	//
 	@RequestMapping(method = RequestMethod.PUT, value = "{id}/accept")
 	public ResponseEntity<PurchaseOrderResource> acceptPO(@PathVariable("id") Long id) {
 		PurchaseOrder po = PurchaseOrder.findPurchaseOrder(id);
@@ -92,20 +126,10 @@ public class PurchaseOrderRestController {
 			PurchaseOrderResource resource = assembler.toResource(po);
 
 			try {
-				Method methodLink = PurchaseOrderRestController.class.getMethod(
-						"requestPOUpdate", Long.class, PurchaseOrderResource.class);
-				String link = linkTo(methodLink, po.getId()).toUri()
-						.toString();
-				resource.add(new ExtendedLink(link, "requestPOUpdate", "POST"));
-				
-				Method methodLink2 = PurchaseOrderRestController.class.getMethod(
-						"closePO", Long.class);
-				String link2 = linkTo(methodLink2, po.getId()).toUri()
-						.toString();
-				resource.add(new ExtendedLink(link2, "closePO", "DELETE"));
+				addMethodLinkWithResource(po, resource, "requestPOUpdate", "POST");
+				addMethodLink(po, resource, "closePO", "DELETE");
 			
 			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			response = new ResponseEntity<>(resource, HttpStatus.OK);
@@ -134,20 +158,16 @@ public class PurchaseOrderRestController {
 			poUpdate.setTotalCost(res.getTotalCost());
 			poUpdate.persist();
 			
-			
-			//TODO Add links to the response
-			/*
-			String acceptLink = linkTo(_acceptPOUpdate, po.getId()).toUri()
-					.toString();
-			resource.add(new ExtendedLink(acceptLink, "acceptPOUpdate", "POST"));
-			String rejectLink = linkTo(_rejectPOUpdate, po.getId()).toUri()
-					.toString();
-			resource.add(new ExtendedLink(rejectLink, "rejectPOUpdate", "DELETE"));
-			*/
-			
-			
 			PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
 			PurchaseOrderResource resource = assembler.toResource(po);
+			
+			try {
+				addMethodLinkWithTwoIDs(po, poUpdate, resource, "rejectPOUpdate", "DELETE");
+				addMethodLinkWithTwoIDs(po, poUpdate, resource, "acceptPOUpdate", "POST");
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		
 			response = new ResponseEntity<>(resource,
 					HttpStatus.OK);
@@ -155,6 +175,82 @@ public class PurchaseOrderRestController {
 			response = new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
 		return response;
 	}
+	
+	
+	//OK
+	@RequestMapping(method = RequestMethod.DELETE, value = "{id}/updates/{uid}/reject")
+	public ResponseEntity<PurchaseOrderResource> rejectPOUpdate(@PathVariable("id") Long id, @PathVariable("uid") Long uid) {
+		PurchaseOrder po = PurchaseOrder.findPurchaseOrder(id);
+		ResponseEntity<PurchaseOrderResource> response;
+		
+		if (po.getStatus().equals(HireRequestStatus.PENDING_UPDATE)) {
+			po.setStatus(HireRequestStatus.OPEN);
+			po.persist();
+			
+			PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
+			PurchaseOrderResource resource = assembler.toResource(po);
+
+			try {
+				addMethodLinkWithResource(po, resource, "requestPOUpdate", "POST");
+				addMethodLink(po, resource, "closePO", "DELETE");
+			
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+			response = new ResponseEntity<>(resource, HttpStatus.OK);
+		} else
+			response = new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+		return response;
+	}
+	
+	
+	//OK
+	@RequestMapping(method = RequestMethod.POST, value = "{id}/updates/{uid}/accept")
+	public ResponseEntity<PurchaseOrderResource> acceptPOUpdate(@PathVariable("id") Long id, @PathVariable("uid") Long uid) {
+		PurchaseOrder po = PurchaseOrder.findPurchaseOrder(id);
+		ResponseEntity<PurchaseOrderResource> response;
+		
+		if (po.getStatus().equals(HireRequestStatus.PENDING_UPDATE)) {
+			PurchaseOrderUpdate poUpdate = PurchaseOrderUpdate.findPurchaseOrderUpdate(uid);
+			po.setEndDate(poUpdate.getEndDate());
+			po.setPlant(poUpdate.getPlant());
+			po.setStartDate(poUpdate.getStartDate());
+			po.setTotalCost(poUpdate.getTotalCost());
+			po.setStatus(HireRequestStatus.OPEN);
+			po.persist();
+			
+			PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
+			PurchaseOrderResource resource = assembler.toResource(po);
+
+			try {
+				addMethodLinkWithResource(po, resource, "requestPOUpdate", "POST");
+				addMethodLink(po, resource, "closePO", "DELETE");
+			
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+			response = new ResponseEntity<>(resource, HttpStatus.OK);
+		} else
+			response = new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+		return response;
+	}
+
+	//OK
+	@RequestMapping(method = RequestMethod.DELETE, value = "{id}")
+	public ResponseEntity<Void> closePO(
+			@PathVariable("id") Long id) {
+		PurchaseOrder p = PurchaseOrder.findPurchaseOrder(id);
+		p.setStatus(HireRequestStatus.CLOSED);
+		p.persist();
+		HttpHeaders headers = new HttpHeaders();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequestUri()
+				.pathSegment(p.getId().toString()).build().toUri();
+		headers.setLocation(location);
+		ResponseEntity<Void> response = new ResponseEntity<>(headers,
+				HttpStatus.OK);
+		return response;
+	}
+	
 	
 	// OK
 	@RequestMapping(method = RequestMethod.GET, value = "{id}")
@@ -186,49 +282,15 @@ public class PurchaseOrderRestController {
 				resource, HttpStatus.OK);
 		return response;
 	}
-	
 
-	@RequestMapping(method = RequestMethod.POST, value = "{id}/reject")
-	public ResponseEntity<PurchaseOrderResource> rejectPO(@PathVariable("id") Long id) {
-		PurchaseOrder po = PurchaseOrder.findPurchaseOrder(id);
-		ResponseEntity<PurchaseOrderResource> response;
-		if (po.getStatus().equals(HireRequestStatus.PENDING_CONFIRMATION)) {
-			po.setStatus(HireRequestStatus.REJECTED);
-			po.persist();
-			PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
-			PurchaseOrderResource resource = assembler.toResource(po);
-			try {
-				addMethodLinkWithResource(po, resource, "updatePO", "PUT");
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			response = new ResponseEntity<>(resource, HttpStatus.OK);
-		} else
-			response = new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
-		return response;
+	private void addMethodLinkWithTwoIDs(PurchaseOrder po, PurchaseOrderUpdate poUpdate,
+			PurchaseOrderResource resource, String action,  String method) throws NoSuchMethodException {
+		Method methodLink = PurchaseOrderRestController.class.getMethod(
+				action, Long.class, Long.class);
+		String link = linkTo(methodLink, po.getId(), poUpdate.getId()).toUri()
+				.toString();
+		resource.add(new ExtendedLink(link, action, method));
 	}
-
-	@RequestMapping(method = RequestMethod.POST, value = "")
-	public ResponseEntity<Void> createPO(@RequestBody PurchaseOrderResource res)
-			throws NoSuchMethodException, SecurityException {
-		PurchaseOrder po = new PurchaseOrder();
-		po.setEndDate(res.getEndDate());
-		po.setPlant(Plant.findPlant(res.getPlantResource().getIdentifier()));
-		po.setStartDate(res.getStartDate());
-		po.setStatus(HireRequestStatus.PENDING_CONFIRMATION);
-		po.setTotalCost(res.getTotalCost());
-		po.persist();
-
-		HttpHeaders headers = new HttpHeaders();
-		URI location = ServletUriComponentsBuilder.fromCurrentRequestUri()
-				.pathSegment(po.getId().toString()).build().toUri();
-		headers.setLocation(location);
-		ResponseEntity<Void> response = new ResponseEntity<>(headers,
-				HttpStatus.CREATED);
-		return response;
-	}
-
 	
 	private void addMethodLinkWithResource(PurchaseOrder po,
 			PurchaseOrderResource resource, String action,  String method) throws NoSuchMethodException {

@@ -113,16 +113,4 @@ public class PlantIntegrationTest {
         obj.flush();
         Assert.assertNotNull("Expected 'Plant' identifier to no longer be null", obj.getId());
     }
-
-	@Test
-    public void testRemove() {
-        Plant obj = dod.getRandomPlant();
-        Assert.assertNotNull("Data on demand for 'Plant' failed to initialize correctly", obj);
-        Long id = obj.getId();
-        Assert.assertNotNull("Data on demand for 'Plant' failed to provide an identifier", id);
-        obj = Plant.findPlant(id);
-        obj.remove();
-        obj.flush();
-        Assert.assertNull("Failed to remove 'Plant' with identifier '" + id + "'", Plant.findPlant(id));
-    }
 }
