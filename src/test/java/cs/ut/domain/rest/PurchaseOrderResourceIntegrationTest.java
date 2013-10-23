@@ -12,7 +12,9 @@ import java.util.Properties;
 import javax.ws.rs.core.MediaType;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.roo.addon.test.RooIntegrationTest;
@@ -27,6 +29,7 @@ import cs.ut.domain.LoadTestProperties;
 import cs.ut.domain.Plant;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.PurchaseOrderUpdate;
+import cs.ut.domain.service.PurchaseOrderNotFound;
 
 @RooIntegrationTest(entity = PurchaseOrderResource.class)
 public class PurchaseOrderResourceIntegrationTest {
@@ -281,4 +284,5 @@ public class PurchaseOrderResourceIntegrationTest {
 		assertTrue(poResource.getTotalCost().intValue() == 2);
 		assertTrue(poResource.get_links().size() == 2);
 	}
+
 }

@@ -3,6 +3,7 @@ package cs.ut.domain.rest.controller;
 import java.lang.reflect.Method;
 import java.net.URI;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +22,17 @@ import cs.ut.domain.PurchaseOrderUpdate;
 import cs.ut.domain.rest.PurchaseOrderResource;
 import cs.ut.domain.rest.PurchaseOrderResourceAssembler;
 import cs.ut.domain.rest.PurchaseOrderStatusResource;
+import cs.ut.domain.service.PurchaseOrderNotFound;
+import cs.ut.domain.service.PurchaseOrderService;
 import cs.ut.util.ExtendedLink;
 
 @Controller
 @RequestMapping("/rest/pos/")
 public class PurchaseOrderRestController {
+	
+	@Autowired
+	PurchaseOrderService poService;
+	
 	//OK
 	@RequestMapping(method = RequestMethod.POST, value = "")
 	public ResponseEntity<PurchaseOrderResource> createPO(@RequestBody PurchaseOrderResource res) {
@@ -255,10 +262,12 @@ public class PurchaseOrderRestController {
 	// OK
 	@RequestMapping(method = RequestMethod.GET, value = "{id}")
 	public ResponseEntity<PurchaseOrderResource> getPO(
-			@PathVariable("id") Long id) throws NoSuchMethodException, SecurityException {
-		PurchaseOrder po = PurchaseOrder.findPurchaseOrder(id);
+			@PathVariable("id") Long id) throws NoSuchMethodException, SecurityException, PurchaseOrderNotFound {
+		
+		PurchaseOrder po = poService.getPO(id);
 		PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
 		PurchaseOrderResource resource = assembler.toResource(po);
+	
 		switch (po.getStatus()) {
 		case PENDING_CONFIRMATION:
 			addMethodLink(po, resource, "rejectPO", "DELETE");
