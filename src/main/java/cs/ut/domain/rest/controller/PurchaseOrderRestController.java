@@ -50,6 +50,7 @@ public class PurchaseOrderRestController {
 		try {
 			addMethodLink(po, resource, "acceptPO", "POST");
 			addMethodLink(po, resource, "rejectPO", "DELETE");
+			addMethodLink(po, resource, "getPO", "GET");
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		}

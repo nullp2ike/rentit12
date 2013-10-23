@@ -117,7 +117,7 @@ public class PurchaseOrderResourceIntegrationTest {
 				.equals(HireRequestStatus.PENDING_CONFIRMATION));
 		PurchaseOrderResource poResourceAfter = clientResponse
 				.getEntity(PurchaseOrderResource.class);
-		assertTrue(poResourceAfter.get_links().size() == 2);
+		assertTrue(poResourceAfter.get_links().size() == 3);
 	}
 	
 	
