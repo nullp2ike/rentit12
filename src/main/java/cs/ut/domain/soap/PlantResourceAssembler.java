@@ -23,6 +23,7 @@ public class PlantResourceAssembler {
 		List<PlantResource> listOfPlantResources = new ArrayList<PlantResource>();
 		for (int i = 0; i < plants.size(); i++) {
 			PlantResource plantResource = new PlantResource();
+			plantResource.setIdentifier(plants.get(i).getId());
 			plantResource.setDescription(plants.get(i).getDescription());
 			plantResource.setPlantName(plants.get(i).getName());
 			plantResource.setPricePerDay(plants.get(i).getPricePerDay());

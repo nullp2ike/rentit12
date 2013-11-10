@@ -89,6 +89,11 @@
 		<servlet-name>jaxws-servlet</servlet-name>
 		<url-pattern>/PlantSOAPService</url-pattern>
 	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>jaxws-servlet</servlet-name>
+		<url-pattern>/PurchaseOrderSOAPService</url-pattern>
+	</servlet-mapping>
 
 	<session-config>
 		<session-timeout>10</session-timeout>

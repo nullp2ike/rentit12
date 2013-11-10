@@ -16,4 +16,11 @@ http://jax-ws.dev.java.net/spring/servlet.xsd">
 		</wss:service>
 	</wss:binding>
 	<bean id="plantService" class="cs.ut.domain.soap.service.PlantSOAPService" />
+	
+	<wss:binding url="/PurchaseOrderSOAPService">
+		<wss:service>
+			<ws:service bean="#purchaseOrderSOAPService" />
+		</wss:service>
+	</wss:binding>
+	<bean id="purchaseOrderSOAPService" class="cs.ut.domain.soap.service.PurchaseOrderSOAPService" />
 </beans>
