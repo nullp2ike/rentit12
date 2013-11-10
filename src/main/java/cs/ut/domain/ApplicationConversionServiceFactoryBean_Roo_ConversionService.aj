@@ -6,6 +6,8 @@ package cs.ut.domain;
 import cs.ut.domain.ApplicationConversionServiceFactoryBean;
 import cs.ut.domain.Plant;
 import cs.ut.domain.PurchaseOrder;
+import cs.ut.repository.PlantRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
@@ -13,6 +15,9 @@ import org.springframework.format.FormatterRegistry;
 privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService {
     
     declare @type: ApplicationConversionServiceFactoryBean: @Configurable;
+    
+    @Autowired
+    PlantRepository ApplicationConversionServiceFactoryBean.plantRepository;
     
     public Converter<Plant, String> ApplicationConversionServiceFactoryBean.getPlantToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<cs.ut.domain.Plant, java.lang.String>() {
@@ -25,7 +30,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Long, Plant> ApplicationConversionServiceFactoryBean.getIdToPlantConverter() {
         return new org.springframework.core.convert.converter.Converter<java.lang.Long, cs.ut.domain.Plant>() {
             public cs.ut.domain.Plant convert(java.lang.Long id) {
-                return Plant.findPlant(id);
+                return plantRepository.findOne(id);
             }
         };
     }

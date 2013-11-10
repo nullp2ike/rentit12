@@ -5,6 +5,7 @@ package cs.ut.domain;
 
 import cs.ut.domain.Plant;
 import cs.ut.domain.PlantDataOnDemand;
+import cs.ut.repository.PlantRepository;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 privileged aspect PlantDataOnDemand_Roo_DataOnDemand {
@@ -22,6 +24,9 @@ privileged aspect PlantDataOnDemand_Roo_DataOnDemand {
     private Random PlantDataOnDemand.rnd = new SecureRandom();
     
     private List<Plant> PlantDataOnDemand.data;
+    
+    @Autowired
+    PlantRepository PlantDataOnDemand.plantRepository;
     
     public Plant PlantDataOnDemand.getNewTransientPlant(int index) {
         Plant obj = new Plant();
@@ -56,14 +61,14 @@ privileged aspect PlantDataOnDemand_Roo_DataOnDemand {
         }
         Plant obj = data.get(index);
         Long id = obj.getId();
-        return Plant.findPlant(id);
+        return plantRepository.findOne(id);
     }
     
     public Plant PlantDataOnDemand.getRandomPlant() {
         init();
         Plant obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return Plant.findPlant(id);
+        return plantRepository.findOne(id);
     }
     
     public boolean PlantDataOnDemand.modifyPlant(Plant obj) {
@@ -73,7 +78,7 @@ privileged aspect PlantDataOnDemand_Roo_DataOnDemand {
     public void PlantDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = Plant.findPlantEntries(from, to);
+        data = plantRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Plant' illegally returned null");
         }
@@ -85,7 +90,7 @@ privileged aspect PlantDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Plant obj = getNewTransientPlant(i);
             try {
-                obj.persist();
+                plantRepository.save(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -94,7 +99,7 @@ privileged aspect PlantDataOnDemand_Roo_DataOnDemand {
                 }
                 throw new IllegalStateException(msg.toString(), e);
             }
-            obj.flush();
+            plantRepository.flush();
             data.add(obj);
         }
     }

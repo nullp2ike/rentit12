@@ -2,21 +2,14 @@ package cs.ut.domain.rest;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Date;
-import java.util.Properties;
 
 import javax.ws.rs.core.MediaType;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.roo.addon.test.RooIntegrationTest;
 
 import com.sun.jersey.api.client.Client;
@@ -29,7 +22,6 @@ import cs.ut.domain.LoadTestProperties;
 import cs.ut.domain.Plant;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.PurchaseOrderUpdate;
-import cs.ut.domain.service.PurchaseOrderNotFound;
 
 @RooIntegrationTest(entity = PurchaseOrderResource.class)
 public class PurchaseOrderResourceIntegrationTest {
@@ -50,11 +42,10 @@ public class PurchaseOrderResourceIntegrationTest {
 
 	private void createPlant() {
 		Plant p = new Plant();
-		p.setDescription("Dodge 2013");
+		p.setDescription("Dodges 2013");
 		p.setName("Truck");
 		p.setPricePerDay(new BigDecimal(200));
 		p.persist();
-		p.flush();
 		plantId = p.getId();
 	}
 
@@ -72,7 +63,6 @@ public class PurchaseOrderResourceIntegrationTest {
 		po.setStatus(status);
 		po.setTotalCost(new BigDecimal(2));
 		po.persist();
-		po.flush();
 		return po.getId();
 	}
 	
@@ -84,7 +74,6 @@ public class PurchaseOrderResourceIntegrationTest {
 		poUpdate.setStartDate(new Date());
 		poUpdate.setPurchaseOrderId(id);
 		poUpdate.persist();
-		poUpdate.flush();
 		return poUpdate.getId();
 	}
 

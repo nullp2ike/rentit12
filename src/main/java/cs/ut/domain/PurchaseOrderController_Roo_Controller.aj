@@ -7,6 +7,7 @@ import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.Plant;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.PurchaseOrderController;
+import cs.ut.repository.PlantRepository;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +15,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.joda.time.format.DateTimeFormat;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +27,9 @@ import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
 privileged aspect PurchaseOrderController_Roo_Controller {
+    
+    @Autowired
+    PlantRepository PurchaseOrderController.plantRepository;
     
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String PurchaseOrderController.create(@Valid PurchaseOrder purchaseOrder, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
@@ -41,7 +46,7 @@ privileged aspect PurchaseOrderController_Roo_Controller {
     public String PurchaseOrderController.createForm(Model uiModel) {
         populateEditForm(uiModel, new PurchaseOrder());
         List<String[]> dependencies = new ArrayList<String[]>();
-        if (Plant.countPlants() == 0) {
+        if (plantRepository.count() == 0) {
             dependencies.add(new String[] { "plant", "plants" });
         }
         uiModel.addAttribute("dependencies", dependencies);
@@ -107,7 +112,7 @@ privileged aspect PurchaseOrderController_Roo_Controller {
         uiModel.addAttribute("purchaseOrder", purchaseOrder);
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("hirerequeststatuses", Arrays.asList(HireRequestStatus.values()));
-        uiModel.addAttribute("plants", Plant.findAllPlants());
+        uiModel.addAttribute("plants", plantRepository.findAll());
     }
     
     String PurchaseOrderController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

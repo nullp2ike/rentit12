@@ -25,9 +25,9 @@ import com.sun.jersey.api.client.WebResource;
 import cs.ut.domain.LoadTestProperties;
 import cs.ut.domain.Plant;
 
-@ContextConfiguration(locations = { "/META-INF/spring/applicationContext.xml" })
+@ContextConfiguration(locations = { "/META-INF/spring/applicationContext*.xml" })
 @RooIntegrationTest(entity = PlantResourceList.class)
-public class PlantResourceListIntegrationTest extends AbstractJUnit4SpringContextTests {
+public class PlantResourceListIntegrationTest {
 	
 	Client client;
 	

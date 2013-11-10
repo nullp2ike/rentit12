@@ -7,6 +7,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.test.RooIntegrationTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
@@ -18,15 +19,17 @@ import com.sun.jersey.api.client.WebResource;
 
 import cs.ut.domain.LoadTestProperties;
 import cs.ut.domain.Plant;
+import cs.ut.repository.PlantRepository;
 
-@ContextConfiguration(locations = { "/META-INF/spring/applicationContext.xml" })
+@ContextConfiguration(locations = { "/META-INF/spring/applicationContext*.xml" })
 @RooIntegrationTest(entity = PlantResource.class)
-public class PlantResourceIntegrationTest extends AbstractJUnit4SpringContextTests{
+public class PlantResourceIntegrationTest{
 
 	private String app_url;
 	
 	Client client;
 	
+	@Autowired PlantRepository plantRepository;
     
     @Before
     public void setUp() {

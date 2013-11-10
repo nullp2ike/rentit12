@@ -5,9 +5,11 @@ package cs.ut.domain;
 
 import cs.ut.domain.Plant;
 import cs.ut.domain.PlantController;
+import cs.ut.repository.PlantRepository;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,9 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect PlantController_Roo_Controller {
     
+    @Autowired
+    PlantRepository PlantController.plantRepository;
+    
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String PlantController.create(@Valid Plant plant, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
@@ -26,7 +31,7 @@ privileged aspect PlantController_Roo_Controller {
             return "plants/create";
         }
         uiModel.asMap().clear();
-        plant.persist();
+        plantRepository.save(plant);
         return "redirect:/plants/" + encodeUrlPathSegment(plant.getId().toString(), httpServletRequest);
     }
     
@@ -38,7 +43,7 @@ privileged aspect PlantController_Roo_Controller {
     
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String PlantController.show(@PathVariable("id") Long id, Model uiModel) {
-        uiModel.addAttribute("plant", Plant.findPlant(id));
+        uiModel.addAttribute("plant", plantRepository.findOne(id));
         uiModel.addAttribute("itemId", id);
         return "plants/show";
     }
@@ -48,11 +53,11 @@ privileged aspect PlantController_Roo_Controller {
         if (page != null || size != null) {
             int sizeNo = size == null ? 10 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("plants", Plant.findPlantEntries(firstResult, sizeNo));
-            float nrOfPages = (float) Plant.countPlants() / sizeNo;
+            uiModel.addAttribute("plants", plantRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / sizeNo, sizeNo)).getContent());
+            float nrOfPages = (float) plantRepository.count() / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
-            uiModel.addAttribute("plants", Plant.findAllPlants());
+            uiModel.addAttribute("plants", plantRepository.findAll());
         }
         return "plants/list";
     }
@@ -64,20 +69,20 @@ privileged aspect PlantController_Roo_Controller {
             return "plants/update";
         }
         uiModel.asMap().clear();
-        plant.merge();
+        plantRepository.save(plant);
         return "redirect:/plants/" + encodeUrlPathSegment(plant.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String PlantController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, Plant.findPlant(id));
+        populateEditForm(uiModel, plantRepository.findOne(id));
         return "plants/update";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String PlantController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        Plant plant = Plant.findPlant(id);
-        plant.remove();
+        Plant plant = plantRepository.findOne(id);
+        plantRepository.delete(plant);
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
