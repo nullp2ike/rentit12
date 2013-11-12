@@ -1,8 +1,13 @@
 package cs.ut.domain.rest.controller;
 
 import java.net.URI;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +23,14 @@ import cs.ut.domain.Plant;
 import cs.ut.domain.rest.PlantResource;
 import cs.ut.domain.rest.PlantResourceAssembler;
 import cs.ut.domain.rest.PlantResourceList;
+import cs.ut.repository.PlantRepository;
 
 @Controller
 @RequestMapping("/rest/plant")
 public class PlantRestController {
+	
+	@Autowired
+	PlantRepository repository;
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<PlantResource> getPlant(@PathVariable("id") Long id){
@@ -34,11 +43,31 @@ public class PlantRestController {
 	
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/")
-	public ResponseEntity<PlantResourceList> getPlantList(){
-		List<Plant> plantList = Plant.findAllPlants();
+	public ResponseEntity<PlantResourceList> getPlantList(@RequestParam(required = false, value = "startDate") String startDateString, @RequestParam(required = false, value = "endDate") String endDateString){
+		List<Plant> plantList;
+		
+		if(startDateString != null && endDateString != null){
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy");
+			
+			Date startD = null;
+			Date endD = null;
+			try {
+				startD = formatter.parse(startDateString);
+				endD = formatter.parse(endDateString);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+	    	Date start = new DateTime(startD).toDateMidnight().toDate();
+	    	Date end = new DateTime(endD).toDateMidnight().toDate();
+			plantList = repository.findByDateRange(start, end);
+		} else{
+			plantList = repository.findAll();
+		}
+		
 		PlantResourceAssembler assembler = new PlantResourceAssembler();
 		PlantResourceList resList = assembler.getPlantResourceList(plantList);
 		ResponseEntity<PlantResourceList> response = new ResponseEntity<>(resList, HttpStatus.OK);
 		return response;
 	}
+	
 }

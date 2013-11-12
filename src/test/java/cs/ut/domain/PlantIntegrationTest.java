@@ -160,8 +160,7 @@ public class PlantIntegrationTest {
 		po.persist();
 		po.flush();
 
-		List<Plant> availablePlants = plantRepository.findByDateRange(
-				startDate.toDate(), endDate.toDate());
+		List<Plant> availablePlants = plantRepository.findByDateRange(startDate.toDate(), endDate.toDate());
 		for (Plant plant : availablePlants) {
 			assertTrue(!plant.getName().equals("NotAvailablePlant"));
 		}
