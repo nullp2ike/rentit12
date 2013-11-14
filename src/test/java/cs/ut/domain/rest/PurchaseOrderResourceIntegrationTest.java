@@ -62,6 +62,7 @@ public class PurchaseOrderResourceIntegrationTest {
 		po.setStartDate(new Date());
 		po.setStatus(status);
 		po.setTotalCost(new BigDecimal(2));
+		po.setPlantHireRequestId(4);
 		po.persist();
 		return po.getId();
 	}
@@ -88,6 +89,7 @@ public class PurchaseOrderResourceIntegrationTest {
 		poResource.setEndDate(new Date());
 		poResource.setStartDate(new Date());
 		poResource.setPlantResource(plantResource);
+		poResource.setPlantHireRequestId(0);
 		poResource.setStatus(HireRequestStatus.OPEN); // Creating a PO should
 														// always result in
 														// status

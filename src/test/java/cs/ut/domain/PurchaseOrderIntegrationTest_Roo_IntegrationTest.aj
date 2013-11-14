@@ -4,15 +4,109 @@
 package cs.ut.domain;
 
 import cs.ut.domain.PurchaseOrderIntegrationTest;
+import cs.ut.repository.PurchaseOrderRepository;
 import java.util.Iterator;
+import java.util.List;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 privileged aspect PurchaseOrderIntegrationTest_Roo_IntegrationTest {
     
     declare @type: PurchaseOrderIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
+    
+    @Autowired
+    PurchaseOrderRepository PurchaseOrderIntegrationTest.purchaseOrderRepository;
+    
+    @Test
+    public void PurchaseOrderIntegrationTest.testCount() {
+        Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", dod.getRandomPurchaseOrder());
+        long count = purchaseOrderRepository.count();
+        Assert.assertTrue("Counter for 'PurchaseOrder' incorrectly reported there were no entries", count > 0);
+    }
+    
+    @Test
+    public void PurchaseOrderIntegrationTest.testFind() {
+        PurchaseOrder obj = dod.getRandomPurchaseOrder();
+        Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", obj);
+        Long id = obj.getId();
+        Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to provide an identifier", id);
+        obj = purchaseOrderRepository.findOne(id);
+        Assert.assertNotNull("Find method for 'PurchaseOrder' illegally returned null for id '" + id + "'", obj);
+        Assert.assertEquals("Find method for 'PurchaseOrder' returned the incorrect identifier", id, obj.getId());
+    }
+    
+    @Test
+    public void PurchaseOrderIntegrationTest.testFindAll() {
+        Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", dod.getRandomPurchaseOrder());
+        long count = purchaseOrderRepository.count();
+        Assert.assertTrue("Too expensive to perform a find all test for 'PurchaseOrder', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
+        List<PurchaseOrder> result = purchaseOrderRepository.findAll();
+        Assert.assertNotNull("Find all method for 'PurchaseOrder' illegally returned null", result);
+        Assert.assertTrue("Find all method for 'PurchaseOrder' failed to return any data", result.size() > 0);
+    }
+    
+    @Test
+    public void PurchaseOrderIntegrationTest.testFindEntries() {
+        Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", dod.getRandomPurchaseOrder());
+        long count = purchaseOrderRepository.count();
+        if (count > 20) count = 20;
+        int firstResult = 0;
+        int maxResults = (int) count;
+        List<PurchaseOrder> result = purchaseOrderRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+        Assert.assertNotNull("Find entries method for 'PurchaseOrder' illegally returned null", result);
+        Assert.assertEquals("Find entries method for 'PurchaseOrder' returned an incorrect number of entries", count, result.size());
+    }
+    
+    @Test
+    public void PurchaseOrderIntegrationTest.testSaveUpdate() {
+        PurchaseOrder obj = dod.getRandomPurchaseOrder();
+        Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", obj);
+        Long id = obj.getId();
+        Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to provide an identifier", id);
+        obj = purchaseOrderRepository.findOne(id);
+        boolean modified =  dod.modifyPurchaseOrder(obj);
+        Integer currentVersion = obj.getVersion();
+        PurchaseOrder merged = purchaseOrderRepository.save(obj);
+        purchaseOrderRepository.flush();
+        Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
+        Assert.assertTrue("Version for 'PurchaseOrder' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
+    }
+    
+    @Test
+    public void PurchaseOrderIntegrationTest.testSave() {
+        Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", dod.getRandomPurchaseOrder());
+        PurchaseOrder obj = dod.getNewTransientPurchaseOrder(Integer.MAX_VALUE);
+        Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to provide a new transient entity", obj);
+        Assert.assertNull("Expected 'PurchaseOrder' identifier to be null", obj.getId());
+        try {
+            purchaseOrderRepository.save(obj);
+        } catch (final ConstraintViolationException e) {
+            final StringBuilder msg = new StringBuilder();
+            for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                final ConstraintViolation<?> cv = iter.next();
+                msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
+            }
+            throw new IllegalStateException(msg.toString(), e);
+        }
+        purchaseOrderRepository.flush();
+        Assert.assertNotNull("Expected 'PurchaseOrder' identifier to no longer be null", obj.getId());
+    }
+    
+    @Test
+    public void PurchaseOrderIntegrationTest.testDelete() {
+        PurchaseOrder obj = dod.getRandomPurchaseOrder();
+        Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", obj);
+        Long id = obj.getId();
+        Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to provide an identifier", id);
+        obj = purchaseOrderRepository.findOne(id);
+        purchaseOrderRepository.delete(obj);
+        purchaseOrderRepository.flush();
+        Assert.assertNull("Failed to remove 'PurchaseOrder' with identifier '" + id + "'", purchaseOrderRepository.findOne(id));
+    }
     
 }

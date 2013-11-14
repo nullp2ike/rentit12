@@ -7,6 +7,7 @@ import cs.ut.domain.ApplicationConversionServiceFactoryBean;
 import cs.ut.domain.Plant;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.repository.PlantRepository;
+import cs.ut.repository.PurchaseOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.core.convert.converter.Converter;
@@ -18,6 +19,9 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     
     @Autowired
     PlantRepository ApplicationConversionServiceFactoryBean.plantRepository;
+    
+    @Autowired
+    PurchaseOrderRepository ApplicationConversionServiceFactoryBean.purchaseOrderRepository;
     
     public Converter<Plant, String> ApplicationConversionServiceFactoryBean.getPlantToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<cs.ut.domain.Plant, java.lang.String>() {
@@ -46,7 +50,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<PurchaseOrder, String> ApplicationConversionServiceFactoryBean.getPurchaseOrderToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<cs.ut.domain.PurchaseOrder, java.lang.String>() {
             public String convert(PurchaseOrder purchaseOrder) {
-                return new StringBuilder().append(purchaseOrder.getStartDate()).append(' ').append(purchaseOrder.getEndDate()).append(' ').append(purchaseOrder.getTotalCost()).toString();
+                return new StringBuilder().append(purchaseOrder.getStartDate()).append(' ').append(purchaseOrder.getEndDate()).append(' ').append(purchaseOrder.getTotalCost()).append(' ').append(purchaseOrder.getPlantHireRequestId()).toString();
             }
         };
     }
@@ -54,7 +58,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Long, PurchaseOrder> ApplicationConversionServiceFactoryBean.getIdToPurchaseOrderConverter() {
         return new org.springframework.core.convert.converter.Converter<java.lang.Long, cs.ut.domain.PurchaseOrder>() {
             public cs.ut.domain.PurchaseOrder convert(java.lang.Long id) {
-                return PurchaseOrder.findPurchaseOrder(id);
+                return purchaseOrderRepository.findOne(id);
             }
         };
     }

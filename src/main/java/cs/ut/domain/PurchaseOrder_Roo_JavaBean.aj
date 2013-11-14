@@ -51,4 +51,12 @@ privileged aspect PurchaseOrder_Roo_JavaBean {
         this.plant = plant;
     }
     
+    public long PurchaseOrder.getPlantHireRequestId() {
+        return this.plantHireRequestId;
+    }
+    
+    public void PurchaseOrder.setPlantHireRequestId(long plantHireRequestId) {
+        this.plantHireRequestId = plantHireRequestId;
+    }
+    
 }

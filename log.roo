@@ -30,3 +30,13 @@ test integration --entity ~.domain.Plant
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-11-10 20:17:00
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-11-12 13:05:35
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-11-12 13:05:49
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-11-13 21:52:03
+web mvc controller --class ~.web.PurchaseOrderApproveController --preferredMapping /purchaseorders/new
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-11-13 22:34:48
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-11-13 23:06:28
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-11-14 09:34:51
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-11-14 21:29:52
+repository jpa --interface ~.repository.PurchaseOrderRepository --entity ~.domain.PurchaseOrder
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-11-15 00:15:55
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-11-15 00:20:06
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-11-15 01:29:05

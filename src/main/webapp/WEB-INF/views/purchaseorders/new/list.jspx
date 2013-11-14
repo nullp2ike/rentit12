@@ -1,0 +1,38 @@
+<div xmlns:spring="http://www.springframework.org/tags"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:form="http://www.springframework.org/tags/form"
+	xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<form:form method="POST" modelAttribute="purchaseOrders"
+		action="list">
+		<table>
+			<tr>
+				<td></td>
+				<td>Plant name</td>
+				<td>Total cost</td>
+				<td>Status</td>
+				<td>Start date</td>
+				<td>End date</td>
+			</tr>
+			<c:forEach var="orders" items="${purchaseOrders.orderList}">
+			<fmt:formatDate value="${orders.startDate}" pattern="dd-MM-yyyy" var="newStartDate"/>
+			<fmt:formatDate value="${orders.endDate}" pattern="dd-MM-yyyy" var="newEndDate"/>
+				<tr>
+					<td><form:radiobutton path="radio" value="${orders.id}"/></td>
+					<td>${orders.plant.name}</td>
+					<td>${orders.totalCost}</td>
+					<td>${orders.status}</td>
+					<td>${newStartDate}</td>
+					<td>${newEndDate}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<input type="submit" name ="submit" value="Approve" />
+		<input type="submit" name ="submit" value="Reject" />
+		<input type="text" name ="rejectionReason" placeholder="Why did you reject .."/>
+	</form:form>
+</div>

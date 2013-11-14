@@ -42,6 +42,7 @@ public class PurchaseOrderRestController {
 		po.setStartDate(res.getStartDate());
 		po.setStatus(HireRequestStatus.PENDING_CONFIRMATION);
 		po.setTotalCost(res.getTotalCost());
+		po.setPlantHireRequestId(res.getPlantHireRequestId());
 		po.persist();
 		
 		PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();

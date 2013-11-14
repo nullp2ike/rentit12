@@ -51,4 +51,7 @@ public class PurchaseOrder {
     @ManyToOne
     @NotNull
     private Plant plant;
+    
+    @NotNull
+    private long plantHireRequestId;
 }

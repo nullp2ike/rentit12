@@ -8,5 +8,6 @@
         <field:display field="status" id="s_cs_ut_domain_PurchaseOrder_status" object="${purchaseorder}" z="sZLLQKwrr2EFOsos/FLKQTNQ9A0="/>
         <field:display field="totalCost" id="s_cs_ut_domain_PurchaseOrder_totalCost" object="${purchaseorder}" z="zr6HsCn1ph46i+6BDfoa0Ob/Kaw="/>
         <field:display field="plant" id="s_cs_ut_domain_PurchaseOrder_plant" object="${purchaseorder}" z="Ad68Yze/8jLlMU2AYyIZ894k9Vc="/>
+        <field:display field="plantHireRequestId" id="s_cs_ut_domain_PurchaseOrder_plantHireRequestId" object="${purchaseorder}" z="khf4Tr0etatJ2Ed35U3b5q9xJ7w="/>
     </page:show>
 </div>

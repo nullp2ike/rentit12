@@ -8,6 +8,7 @@ import cs.ut.domain.Plant;
 import cs.ut.domain.PlantDataOnDemand;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.PurchaseOrderDataOnDemand;
+import cs.ut.repository.PurchaseOrderRepository;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -33,10 +34,14 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
     @Autowired
     PlantDataOnDemand PurchaseOrderDataOnDemand.plantDataOnDemand;
     
+    @Autowired
+    PurchaseOrderRepository PurchaseOrderDataOnDemand.purchaseOrderRepository;
+    
     public PurchaseOrder PurchaseOrderDataOnDemand.getNewTransientPurchaseOrder(int index) {
         PurchaseOrder obj = new PurchaseOrder();
         setEndDate(obj, index);
         setPlant(obj, index);
+        setPlantHireRequestId(obj, index);
         setStartDate(obj, index);
         setStatus(obj, index);
         setTotalCost(obj, index);
@@ -51,6 +56,11 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
     public void PurchaseOrderDataOnDemand.setPlant(PurchaseOrder obj, int index) {
         Plant plant = plantDataOnDemand.getRandomPlant();
         obj.setPlant(plant);
+    }
+    
+    public void PurchaseOrderDataOnDemand.setPlantHireRequestId(PurchaseOrder obj, int index) {
+        Long plantHireRequestId = new Integer(index).longValue();
+        obj.setPlantHireRequestId(plantHireRequestId);
     }
     
     public void PurchaseOrderDataOnDemand.setStartDate(PurchaseOrder obj, int index) {
@@ -78,14 +88,14 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
         }
         PurchaseOrder obj = data.get(index);
         Long id = obj.getId();
-        return PurchaseOrder.findPurchaseOrder(id);
+        return purchaseOrderRepository.findOne(id);
     }
     
     public PurchaseOrder PurchaseOrderDataOnDemand.getRandomPurchaseOrder() {
         init();
         PurchaseOrder obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return PurchaseOrder.findPurchaseOrder(id);
+        return purchaseOrderRepository.findOne(id);
     }
     
     public boolean PurchaseOrderDataOnDemand.modifyPurchaseOrder(PurchaseOrder obj) {
@@ -95,7 +105,7 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
     public void PurchaseOrderDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = PurchaseOrder.findPurchaseOrderEntries(from, to);
+        data = purchaseOrderRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'PurchaseOrder' illegally returned null");
         }
@@ -107,7 +117,7 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             PurchaseOrder obj = getNewTransientPurchaseOrder(i);
             try {
-                obj.persist();
+                purchaseOrderRepository.save(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -116,7 +126,7 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
                 }
                 throw new IllegalStateException(msg.toString(), e);
             }
-            obj.flush();
+            purchaseOrderRepository.flush();
             data.add(obj);
         }
     }
