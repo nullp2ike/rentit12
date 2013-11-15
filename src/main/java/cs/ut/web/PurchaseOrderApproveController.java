@@ -11,14 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 
-import com.sun.jersey.api.client.WebResource;
-
 import cs.ut.domain.HireRequestStatus;
-import cs.ut.domain.LoadTestProperties;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.bean.PurchaseOrderListDTO;
-import cs.ut.domain.rest.PlantResource;
-import cs.ut.domain.rest.PlantResourceList;
 import cs.ut.repository.PurchaseOrderRepository;
 import cs.ut.util.LoadProperties;
 
