@@ -124,18 +124,6 @@ public class PlantIntegrationTest {
         plantRepository.flush();
         Assert.assertNotNull("Expected 'Plant' identifier to no longer be null", obj.getId());
     }
-
-	@Test
-    public void testDelete() {
-        Plant obj = dod.getRandomPlant();
-        Assert.assertNotNull("Data on demand for 'Plant' failed to initialize correctly", obj);
-        Long id = obj.getId();
-        Assert.assertNotNull("Data on demand for 'Plant' failed to provide an identifier", id);
-        obj = plantRepository.findOne(id);
-        plantRepository.delete(obj);
-        plantRepository.flush();
-        Assert.assertNull("Failed to remove 'Plant' with identifier '" + id + "'", plantRepository.findOne(id));
-    }
 	
 	@Test
 	public void testGetAvailablePlantsByDateRange() {

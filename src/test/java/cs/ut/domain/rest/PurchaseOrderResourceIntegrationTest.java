@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.roo.addon.test.RooIntegrationTest;
 
 import com.sun.jersey.api.client.Client;
@@ -18,7 +19,6 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.WebResource;
 
 import cs.ut.domain.HireRequestStatus;
-import cs.ut.domain.LoadTestProperties;
 import cs.ut.domain.Plant;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.PurchaseOrderUpdate;
@@ -28,7 +28,9 @@ public class PurchaseOrderResourceIntegrationTest {
 
 	Client client;
 
-	private String app_url;
+	@Value("${webappurl}")
+	String webappurl;
+	
 	long plantId;
 
 	@Before
@@ -36,8 +38,6 @@ public class PurchaseOrderResourceIntegrationTest {
 
 		client = Client.create();
 		createPlant();
-		LoadTestProperties props = new LoadTestProperties();
-		app_url = props.loadProperty("webappurl");
 	}
 
 	private void createPlant() {
@@ -84,7 +84,7 @@ public class PurchaseOrderResourceIntegrationTest {
 		PlantResourceAssembler assembler = new PlantResourceAssembler();
 		PlantResource plantResource = assembler.getPlantResource(Plant
 				.findPlant(plantId));
-		WebResource webResource = client.resource(app_url + "/rest/pos/");
+		WebResource webResource = client.resource(webappurl + "/rest/pos/");
 		PurchaseOrderResource poResource = new PurchaseOrderResource();
 		poResource.setEndDate(new Date());
 		poResource.setStartDate(new Date());
@@ -116,7 +116,7 @@ public class PurchaseOrderResourceIntegrationTest {
 	@Test
 	public void testRejectPO() {
 		long id = createPO(HireRequestStatus.PENDING_CONFIRMATION);
-		WebResource webResource = client.resource(app_url + "/rest/pos/" + id
+		WebResource webResource = client.resource(webappurl + "/rest/pos/" + id
 				+ "/reject");
 		ClientResponse clientResponse = webResource
 				.type(MediaType.APPLICATION_XML)
@@ -136,7 +136,7 @@ public class PurchaseOrderResourceIntegrationTest {
 	public void testUpdatePO() {
 		long poId = createPO(HireRequestStatus.REJECTED);
 		WebResource webResource = client
-				.resource(app_url + "/rest/pos/" + poId);
+				.resource(webappurl + "/rest/pos/" + poId);
 		PurchaseOrderResourceAssembler poResourceAssembler = new PurchaseOrderResourceAssembler();
 		PurchaseOrder po = PurchaseOrder.findPurchaseOrder(poId);
 		PurchaseOrderResource poResource = poResourceAssembler
@@ -161,7 +161,7 @@ public class PurchaseOrderResourceIntegrationTest {
 	@Test
 	public void testAcceptPO() {
 		long id = createPO(HireRequestStatus.PENDING_CONFIRMATION);
-		WebResource webResource = client.resource(app_url + "/rest/pos/" + id
+		WebResource webResource = client.resource(webappurl + "/rest/pos/" + id
 				+ "/accept");
 		
 		ClientResponse clientResponse = webResource
@@ -181,7 +181,7 @@ public class PurchaseOrderResourceIntegrationTest {
 	@Test
 	public void testRequestPOUpdate() {
 		long poId = createPO(HireRequestStatus.OPEN);
-		WebResource webResource = client.resource(app_url + "/rest/pos/" + poId
+		WebResource webResource = client.resource(webappurl + "/rest/pos/" + poId
 				+ "/updates");
 		PurchaseOrder po = PurchaseOrder.findPurchaseOrder(poId);
 		PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
@@ -209,7 +209,7 @@ public class PurchaseOrderResourceIntegrationTest {
 	public void testRejectPOUpdate() {
 		long id = createPO(HireRequestStatus.PENDING_UPDATE);
 		long uid = createPOUpdate(id, 1);
-		WebResource webResource = client.resource(app_url + "/rest/pos/" + id + "/updates/" + uid 
+		WebResource webResource = client.resource(webappurl + "/rest/pos/" + id + "/updates/" + uid 
 				+ "/reject");
 		ClientResponse clientResponse = webResource
 				.type(MediaType.APPLICATION_XML)
@@ -229,7 +229,7 @@ public class PurchaseOrderResourceIntegrationTest {
 	public void testAcceptPOUpdate() {
 		long id = createPO(HireRequestStatus.PENDING_UPDATE);
 		long uid = createPOUpdate(id, 5432100);
-		WebResource webResource = client.resource(app_url + "/rest/pos/" + id + "/updates/" + uid 
+		WebResource webResource = client.resource(webappurl + "/rest/pos/" + id + "/updates/" + uid 
 				+ "/accept");
 		ClientResponse clientResponse = webResource
 				.type(MediaType.APPLICATION_XML)
@@ -249,7 +249,7 @@ public class PurchaseOrderResourceIntegrationTest {
 	@Test
 	public void testClosePO() {
 		long id = createPO(HireRequestStatus.PENDING_CONFIRMATION);
-		WebResource webResource = client.resource(app_url + "/rest/pos/" + id);
+		WebResource webResource = client.resource(webappurl + "/rest/pos/" + id);
 
 		ClientResponse clientResponse = webResource
 				.type(MediaType.APPLICATION_XML)
@@ -265,7 +265,7 @@ public class PurchaseOrderResourceIntegrationTest {
 	@Test
 	public void testGetPO() {
 		long id = createPO(HireRequestStatus.PENDING_CONFIRMATION);
-		WebResource webResource = client.resource(app_url + "/rest/pos/" + id);
+		WebResource webResource = client.resource(webappurl + "/rest/pos/" + id);
 		ClientResponse clientResponse = webResource
 				.type(MediaType.APPLICATION_XML)
 				.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);

@@ -8,34 +8,32 @@ import javax.ws.rs.core.MediaType;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.roo.addon.test.RooIntegrationTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.WebResource;
 
-import cs.ut.domain.LoadTestProperties;
 import cs.ut.domain.Plant;
 import cs.ut.repository.PlantRepository;
 
 @ContextConfiguration(locations = { "/META-INF/spring/applicationContext*.xml" })
 @RooIntegrationTest(entity = PlantResource.class)
 public class PlantResourceIntegrationTest{
-
-	private String app_url;
 	
 	Client client;
 	
 	@Autowired PlantRepository plantRepository;
+	
+	@Value("${webappurl}")
+	String webappurl;
     
     @Before
     public void setUp() {
     	client = Client.create();	
-    	LoadTestProperties props = new LoadTestProperties();
-    	app_url = props.loadProperty("webappurl");
     }
     
     private long createPlant(){
@@ -51,7 +49,7 @@ public class PlantResourceIntegrationTest{
     @Test
     public void testGetPlant(){
     	long id = createPlant();
-    	WebResource webResource = client.resource(app_url + "/rest/plant/" + id);
+    	WebResource webResource = client.resource(webappurl + "/rest/plant/" + id);
     	ClientResponse response = webResource.type(MediaType.APPLICATION_XML)
     			.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
     	assertTrue(response.getStatus() == Status.OK.getStatusCode());

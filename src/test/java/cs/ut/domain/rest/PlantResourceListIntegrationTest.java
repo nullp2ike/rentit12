@@ -1,27 +1,18 @@
 package cs.ut.domain.rest;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
 
 import javax.ws.rs.core.MediaType;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.core.env.Environment;
 import org.springframework.roo.addon.test.RooIntegrationTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -29,7 +20,6 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.WebResource;
 
 import cs.ut.domain.HireRequestStatus;
-import cs.ut.domain.LoadTestProperties;
 import cs.ut.domain.Plant;
 import cs.ut.domain.PurchaseOrder;
 
@@ -39,14 +29,12 @@ public class PlantResourceListIntegrationTest {
 	
 	Client client;
 	
-	private String app_url;
+	@Value("${webappurl}")
+	String webappurl;
     
     @Before
     public void setUp() {
     	client = Client.create();
-    	LoadTestProperties props = new LoadTestProperties();
-    	app_url = props.loadProperty("webappurl");
-    	
     }
 	
     private long createPlant(String plantName){
@@ -86,7 +74,7 @@ public class PlantResourceListIntegrationTest {
     	createPlant("PlantResourceListTruck");
     	createPlant("PlantResourceListTruck2");
     	
-    	WebResource webResource = client.resource(app_url + "/rest/plant/");
+    	WebResource webResource = client.resource(webappurl + "/rest/plant/");
  
     	ClientResponse getResponse = webResource.type(MediaType.APPLICATION_XML)
     			.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
@@ -102,7 +90,7 @@ public class PlantResourceListIntegrationTest {
     	createPlant("PlantResourceListTruck");
     	
     	//First get the number of all plants
-    	WebResource webResource = client.resource(app_url + "/rest/plant/");
+    	WebResource webResource = client.resource(webappurl + "/rest/plant/");
     	 
     	ClientResponse getResponse = webResource.type(MediaType.APPLICATION_XML)
     			.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
@@ -119,7 +107,7 @@ public class PlantResourceListIntegrationTest {
     	String startDateString = new SimpleDateFormat("dd-MM-yy").format(today.toDate());
     	String endDateString = new SimpleDateFormat("dd-MM-yy").format(tomorrow.toDate());
 
-    	WebResource webResourceDates = client.resource(app_url + "/rest/plant/" + "?startDate=" + startDateString + "&endDate=" + endDateString);
+    	WebResource webResourceDates = client.resource(webappurl + "/rest/plant/" + "?startDate=" + startDateString + "&endDate=" + endDateString);
  
     	ClientResponse getResponseDates = webResourceDates.type(MediaType.APPLICATION_XML)
     			.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
