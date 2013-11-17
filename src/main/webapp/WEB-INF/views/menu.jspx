@@ -8,7 +8,6 @@
             <menu:item id="i_plant_list" messageCode="global_menu_list" url="/plants?page=1&amp;size=${empty param.size ? 10 : param.size}" z="nVO5Nlhqho9gPDPyH2U9yITgeHo="/>
         </menu:category>
         <menu:category id="c_purchaseorder" z="LdgN+Z53I4kIOyJx+mc8CFmbIuU=">
-            <menu:item id="i_purchaseorder_new" messageCode="global_menu_new" url="/purchaseorders?form" z="I6gpOtV3+H+iGlPgmv55Zhufszk="/>
             <menu:item id="i_purchaseorder_list" messageCode="global_menu_list" url="/purchaseorders?page=1&amp;size=${empty param.size ? 10 : param.size}" z="DHer7WK9MJB49FXJX9B6Kds2DxY="/>
         </menu:category>
         <menu:category id="c_controller" z="nj8Dm3hojIyIEyPkwE1UMDIs+K8=">
