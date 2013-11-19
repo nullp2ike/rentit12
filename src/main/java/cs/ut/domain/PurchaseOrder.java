@@ -13,7 +13,6 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Enumerated;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 @RooJavaBean
@@ -54,4 +53,7 @@ public class PurchaseOrder {
     
     @NotNull
     private long plantHireRequestId;
+    
+    @NotNull
+    boolean invoiceSent;
 }

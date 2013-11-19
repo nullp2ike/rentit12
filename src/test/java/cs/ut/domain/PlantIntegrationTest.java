@@ -3,7 +3,6 @@ import static org.junit.Assert.assertTrue;
 import cs.ut.repository.PlantRepository;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 

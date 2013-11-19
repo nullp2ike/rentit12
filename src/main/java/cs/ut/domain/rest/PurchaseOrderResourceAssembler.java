@@ -2,7 +2,6 @@ package cs.ut.domain.rest;
 
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
-import cs.ut.domain.Plant;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.rest.controller.PurchaseOrderRestController;
 

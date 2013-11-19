@@ -17,7 +17,7 @@ import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.bean.PurchaseOrderListDTO;
 import cs.ut.repository.PurchaseOrderRepository;
 
-@RequestMapping("/purchaseorders/new/**")
+@RequestMapping("/purchaseorders/pending/**")
 @Controller
 public class PurchaseOrderApproveController {
 	
@@ -36,7 +36,7 @@ public class PurchaseOrderApproveController {
     	List<PurchaseOrder> orderList = repository.findByStatus(HireRequestStatus.PENDING_CONFIRMATION);
     	po.setOrderList(orderList);
     	modelMap.put("purchaseOrders", po);
-    	return "purchaseorders/new/list";
+    	return "purchaseorders/pending/list";
     }
     
     
@@ -67,7 +67,7 @@ public class PurchaseOrderApproveController {
     	List<PurchaseOrder> orderList = repository.findByStatus(HireRequestStatus.PENDING_CONFIRMATION);
     	po.setOrderList(orderList);
     	modelMap.put("purchaseOrders", po);
-    	return "purchaseorders/new/list";
+    	return "purchaseorders/pending/list";
     }
 
 }

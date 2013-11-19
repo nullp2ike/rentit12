@@ -9,12 +9,9 @@ import javax.xml.bind.annotation.XmlElement;
 
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.Plant;
 import cs.ut.domain.PurchaseOrder;
-import cs.ut.repository.PlantRepository;
 
 @WebService
 public class PurchaseOrderSOAPService {

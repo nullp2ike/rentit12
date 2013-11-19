@@ -59,4 +59,12 @@ privileged aspect PurchaseOrder_Roo_JavaBean {
         this.plantHireRequestId = plantHireRequestId;
     }
     
+    public boolean PurchaseOrder.isInvoiceSent() {
+        return this.invoiceSent;
+    }
+    
+    public void PurchaseOrder.setInvoiceSent(boolean invoiceSent) {
+        this.invoiceSent = invoiceSent;
+    }
+    
 }

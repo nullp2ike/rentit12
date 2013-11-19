@@ -40,3 +40,6 @@ repository jpa --interface ~.repository.PurchaseOrderRepository --entity ~.domai
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-11-15 00:15:55
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-11-15 00:20:06
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-11-15 01:29:05
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-11-18 23:26:20
+web mvc controller --class ~.web.PurchaseOrderInvoiceController --preferredMapping /purchaseorder/approved
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-11-19 10:55:37

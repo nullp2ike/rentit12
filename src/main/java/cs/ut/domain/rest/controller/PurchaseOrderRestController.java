@@ -21,7 +21,6 @@ import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.PurchaseOrderUpdate;
 import cs.ut.domain.rest.PurchaseOrderResource;
 import cs.ut.domain.rest.PurchaseOrderResourceAssembler;
-import cs.ut.domain.rest.PurchaseOrderStatusResource;
 import cs.ut.domain.service.PurchaseOrderNotFound;
 import cs.ut.domain.service.PurchaseOrderService;
 import cs.ut.util.ExtendedLink;

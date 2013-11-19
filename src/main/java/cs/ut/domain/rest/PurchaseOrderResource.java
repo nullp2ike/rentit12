@@ -9,7 +9,6 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import cs.ut.domain.HireRequestStatus;
-import cs.ut.domain.Plant;
 
 @RooJavaBean
 @RooToString

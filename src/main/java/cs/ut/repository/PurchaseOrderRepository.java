@@ -1,15 +1,13 @@
 package cs.ut.repository;
-import java.util.Date;
 import java.util.List;
-
-import cs.ut.domain.HireRequestStatus;
-import cs.ut.domain.Plant;
-import cs.ut.domain.PurchaseOrder;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.roo.addon.layers.repository.jpa.RooJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
+
+import cs.ut.domain.HireRequestStatus;
+import cs.ut.domain.PurchaseOrder;
 
 @RooJpaRepository(domainType = PurchaseOrder.class)
 public interface PurchaseOrderRepository {
@@ -17,4 +15,10 @@ public interface PurchaseOrderRepository {
 	
 	@Transactional(readOnly = true)
 	List<PurchaseOrder> findByStatus(@Param("status") HireRequestStatus status);
+	
+	@Query("SELECT po from PurchaseOrder AS po WHERE po.status = :status AND invoice_sent = false")
+	
+	@Transactional(readOnly = true)
+	List<PurchaseOrder> findForSendingInvoice(@Param("status") HireRequestStatus status);
+	
 }

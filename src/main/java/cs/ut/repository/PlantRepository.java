@@ -4,7 +4,6 @@ import java.util.List;
 
 import cs.ut.domain.Plant;
 
-import org.joda.time.DateTime;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.roo.addon.layers.repository.jpa.RooJpaRepository;
