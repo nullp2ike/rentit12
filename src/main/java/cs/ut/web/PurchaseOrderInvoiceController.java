@@ -82,7 +82,7 @@ public class PurchaseOrderInvoiceController {
 		}
 		po.setInvoiceSent(true);
 		List<PurchaseOrder> orderList = repository
-				.findForSendingInvoice(HireRequestStatus.CLOSED);
+				.findForSendingInvoice(HireRequestStatus.OPEN);
 		poDTO.setOrderList(orderList);
 		modelMap.put("purchaseOrders", poDTO);
 		return "purchaseorders/approved/list";
