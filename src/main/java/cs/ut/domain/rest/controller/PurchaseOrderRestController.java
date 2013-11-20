@@ -41,7 +41,6 @@ public class PurchaseOrderRestController {
 		po.setStartDate(res.getStartDate());
 		po.setStatus(HireRequestStatus.PENDING_CONFIRMATION);
 		po.setTotalCost(res.getTotalCost());
-		po.setPlantHireRequestId(res.getPlantHireRequestId());
 		po.persist();
 		
 		PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
@@ -275,7 +274,7 @@ public class PurchaseOrderRestController {
 			addMethodLink(po, resource, "acceptPO", "POST");
 			break;
 		case OPEN:
-			addMethodLink(po, resource, "requestPOUpdate", "POST");
+			addMethodLinkWithResource(po, resource, "requestPOUpdate", "POST");
 			addMethodLink(po, resource, "closePO", "DELETE");
 			break;
 		case PENDING_UPDATE:
@@ -283,7 +282,7 @@ public class PurchaseOrderRestController {
 			addMethodLink(po, resource, "acceptPOUpdate", "POST");
 			break;
 		case REJECTED:
-			addMethodLink(po, resource, "updatePO", "PUT");
+			addMethodLinkWithResource(po, resource, "updatePO", "PUT");
 			break;
 		default:
 			break;

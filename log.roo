@@ -46,3 +46,5 @@ web mvc controller --class ~.web.PurchaseOrderInvoiceController --preferredMappi
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-11-19 19:48:06
 email sender setup --hostServer smtp.gmail.com --username rentitteam12@gmail.com --password Rent1t12 --port 587 --protocol SMTP 
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-11-19 23:10:18
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-11-20 22:29:13
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-11-20 22:39:32

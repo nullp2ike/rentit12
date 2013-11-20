@@ -89,7 +89,6 @@ public class PurchaseOrderResourceIntegrationTest {
 		poResource.setEndDate(new Date());
 		poResource.setStartDate(new Date());
 		poResource.setPlantResource(plantResource);
-		poResource.setPlantHireRequestId(0);
 		poResource.setStatus(HireRequestStatus.OPEN); // Creating a PO should
 														// always result in
 														// status
