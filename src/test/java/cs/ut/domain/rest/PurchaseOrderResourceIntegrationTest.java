@@ -111,6 +111,35 @@ public class PurchaseOrderResourceIntegrationTest {
 	}
 	
 	
+	@Test
+	public void testCreatePOWithSamePlantAndDatesFails(){
+		PlantResourceAssembler assembler = new PlantResourceAssembler();
+		PlantResource plantResource = assembler.getPlantResource(Plant
+				.findPlant(plantId));
+		WebResource webResource = client.resource(webappurl + "/rest/pos/");
+		PurchaseOrderResource poResource = new PurchaseOrderResource();
+		poResource.setEndDate(new Date());
+		poResource.setStartDate(new Date());
+		poResource.setPlantResource(plantResource);
+		poResource.setTotalCost(new BigDecimal(50));
+		ClientResponse clientResponse = webResource
+				.type(MediaType.APPLICATION_XML)
+				.accept(MediaType.APPLICATION_XML)
+				.post(ClientResponse.class, poResource);
+
+		assertTrue(clientResponse.getStatus() == Status.CREATED.getStatusCode());
+		
+		ClientResponse clientResponse2 = webResource
+				.type(MediaType.APPLICATION_XML)
+				.accept(MediaType.APPLICATION_XML)
+				.post(ClientResponse.class, poResource);
+		
+		assertTrue(clientResponse2.getStatus() == Status.CREATED.getStatusCode());
+		
+		
+	}
+	
+	
 	//
 	@Test
 	public void testRejectPO() {

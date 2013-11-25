@@ -108,8 +108,8 @@ privileged aspect PurchaseOrderController_Roo_Controller {
     }
     
     void PurchaseOrderController.addDateTimeFormatPatterns(Model uiModel) {
-        uiModel.addAttribute("purchaseOrder_startdate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
-        uiModel.addAttribute("purchaseOrder_enddate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("purchaseOrder_startdate_date_format", DateTimeFormat.patternForStyle("S-", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("purchaseOrder_enddate_date_format", DateTimeFormat.patternForStyle("S-", LocaleContextHolder.getLocale()));
     }
     
     void PurchaseOrderController.populateEditForm(Model uiModel, PurchaseOrder purchaseOrder) {
