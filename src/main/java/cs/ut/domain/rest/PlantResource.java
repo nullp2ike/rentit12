@@ -8,7 +8,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@XmlRootElement(name = "plant")
+@XmlRootElement
 public class PlantResource {
 	
 	private String plantName;

@@ -2,35 +2,22 @@ package cs.ut.domain.rest;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.core.MediaType;
-
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectWriter;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.roo.addon.test.RooIntegrationTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestTemplate;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.ClientResponse.Status;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.util.Base64;
 
 import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.Plant;
@@ -38,42 +25,46 @@ import cs.ut.domain.PurchaseOrder;
 import cs.ut.security.Assignments;
 import cs.ut.security.Authorities;
 import cs.ut.security.Users;
+import cs.ut.util.RestHelper;
 
 @ContextConfiguration(locations = { "/META-INF/spring/applicationContext*.xml" })
 @RooIntegrationTest(entity = PlantResourceList.class)
 public class PlantResourceListIntegrationTest {
 
-	Client client;
 
 	@Value("${webappurl}")
 	String webappurl;
 
 	Assignments assignments;
 	Authorities authorities;
+	
+	RestTemplate template;
 
 	@BeforeClass
 	public static void doStuff() {
 		removeStuff();
 		setUsers();
 	}
+	
+	@Before
+	public void  setUp(){
+		template = new RestTemplate();
+	}
 
 	private static void removeStuff() {
 		List<Assignments> assignments = Assignments.findAllAssignmentses();
 		for (Assignments assignments2 : assignments) {
 			assignments2.remove();
-			assignments2.persist();
 		}
 		
 		List<Users> allUsers = Users.findAllUserses();
 		for (Users users : allUsers) {
 			users.remove();
-			users.persist();
 		}
 		
 		List<Authorities> auth = Authorities.findAllAuthoritieses();
 		for (Authorities authorities : auth) {
 			authorities.remove();
-			authorities.persist();
 		}
 	}
 
@@ -81,7 +72,7 @@ public class PlantResourceListIntegrationTest {
 		Users user = new Users();
 		user.setEnabled(true);
 		user.setPassword("5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8");
-		user.setUsername("user");
+		user.setUsername("user@rentit.com");
 		user.persist();
 
 		Users admin = new Users();
@@ -107,11 +98,6 @@ public class PlantResourceListIntegrationTest {
 		assignAdmin.setAuthority(authAdmin);
 		assignAdmin.setUserRentit(admin);
 		assignAdmin.persist();
-	}
-
-	@Before
-	public void setUp() {
-		client = Client.create();
 	}
 
 	private long createPlant(String plantName) {
@@ -152,15 +138,12 @@ public class PlantResourceListIntegrationTest {
 		createPlant("PlantResourceListTruck2");
 
 		HttpEntity<String> requestEntity = new HttpEntity<String>(
-				getHeaders("user" + ":" + "password"));
-
-		RestTemplate template = new RestTemplate();
+				RestHelper.getHeaders("user@rentit.com", "password"));
 		ResponseEntity<PlantResourceList> response = template.exchange(
 				webappurl + "/rest/plant/", HttpMethod.GET, requestEntity,
 				PlantResourceList.class);
 
-		assertTrue(response.getStatusCode().value() == Status.OK
-				.getStatusCode());
+		assertTrue(response.getStatusCode().value() == 200);
 		PlantResourceList plantList = response.getBody();
 		assertTrue(plantList.getListOfPlantResources().size() > 1);
 	}
@@ -171,15 +154,13 @@ public class PlantResourceListIntegrationTest {
 		createPlant("PlantResourceListTruck");
 
 		HttpEntity<String> requestEntity = new HttpEntity<String>(
-				getHeaders("user" + ":" + "password"));
-
-		RestTemplate template = new RestTemplate();
+				RestHelper.getHeaders("user@rentit.com", "password"));
+		
 		ResponseEntity<PlantResourceList> response = template.exchange(
 				webappurl + "/rest/plant/", HttpMethod.GET, requestEntity,
 				PlantResourceList.class);
 
-		assertTrue(response.getStatusCode().value() == Status.OK
-				.getStatusCode());
+		assertTrue(response.getStatusCode().value() == 200);
 
 		PlantResourceList plantList = response.getBody();
 		long allPlantsSize = plantList.getListOfPlantResources().size();
@@ -199,34 +180,10 @@ public class PlantResourceListIntegrationTest {
 						+ "&endDate=" + endDateString, HttpMethod.GET,
 				requestEntity, PlantResourceList.class);
 
-		assertTrue(response2.getStatusCode().value() == Status.OK
-				.getStatusCode());
+		assertTrue(response2.getStatusCode().value() == 200);
 
 		PlantResourceList plantListAvailable = response2.getBody();
 		assertTrue(plantListAvailable.getListOfPlantResources().size() == allPlantsSize - 1);
 
-	}
-
-	private String resourceToJson(PlantResource plantResource) {
-		ObjectWriter ow = new ObjectMapper().writer()
-				.withDefaultPrettyPrinter();
-		String json = null;
-		try {
-			json = ow.writeValueAsString(plantResource);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return json;
-	}
-
-	private static HttpHeaders getHeaders(String auth) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
-		headers.setAccept(Arrays
-				.asList(org.springframework.http.MediaType.APPLICATION_JSON));
-		byte[] encodedAuthorisation = Base64.encode(auth.getBytes());
-		headers.add("Authorization", "Basic "
-				+ new String(encodedAuthorisation));
-		return headers;
 	}
 }

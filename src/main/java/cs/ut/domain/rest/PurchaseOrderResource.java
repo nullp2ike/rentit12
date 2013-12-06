@@ -12,7 +12,7 @@ import cs.ut.domain.HireRequestStatus;
 
 @RooJavaBean
 @RooToString
-@XmlRootElement(name = "purchaseOrder")
+@XmlRootElement
 public class PurchaseOrderResource extends ResourceSupport {
 	
     private Date startDate;

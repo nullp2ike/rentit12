@@ -5,11 +5,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
-import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
@@ -18,17 +15,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.roo.addon.test.RooIntegrationTest;
 import org.springframework.web.client.RestTemplate;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.ClientResponse.Status;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.util.Base64;
 
 import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.Plant;
@@ -37,11 +27,12 @@ import cs.ut.domain.PurchaseOrderUpdate;
 import cs.ut.security.Assignments;
 import cs.ut.security.Authorities;
 import cs.ut.security.Users;
+import cs.ut.util.RestHelper;
 
 @RooIntegrationTest(entity = PurchaseOrderResource.class)
 public class PurchaseOrderResourceIntegrationTest {
 
-	Client client;
+	RestTemplate template;
 
 	@Value("${webappurl}")
 	String webappurl;
@@ -52,6 +43,13 @@ public class PurchaseOrderResourceIntegrationTest {
 	public static void doStuff() {
 		removeStuff();
 		setUsers();
+	}
+	
+
+	@Before
+	public void setUp() {
+		createPlant();	
+		template = new RestTemplate();
 	}
 
 	private static void removeStuff() {
@@ -75,7 +73,7 @@ public class PurchaseOrderResourceIntegrationTest {
 		Users user = new Users();
 		user.setEnabled(true);
 		user.setPassword("5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8");
-		user.setUsername("user");
+		user.setUsername("user@rentit.com");
 		user.persist();
 
 		Users admin = new Users();
@@ -101,13 +99,6 @@ public class PurchaseOrderResourceIntegrationTest {
 		assignAdmin.setAuthority(authAdmin);
 		assignAdmin.setUserRentit(admin);
 		assignAdmin.persist();
-	}
-
-	@Before
-	public void setUp() {
-
-		client = Client.create();
-		createPlant();
 	}
 
 	private void createPlant() {
@@ -166,15 +157,13 @@ public class PurchaseOrderResourceIntegrationTest {
 
 		String json = resourceToJson(poResource);
 		HttpEntity<String> requestEntity = new HttpEntity<String>(json,
-				getHeaders("user" + ":" + "password"));
+				RestHelper.getHeaders("user@rentit.com", "password"));
 
-		RestTemplate template = new RestTemplate();
 		ResponseEntity<PurchaseOrderResource> clientResponse = template
 				.postForEntity(webappurl + "/rest/pos/", requestEntity,
 						PurchaseOrderResource.class);
 
-		assertTrue(clientResponse.getStatusCode().value() == Status.CREATED
-				.getStatusCode());
+		assertTrue(clientResponse.getStatusCode().value() == 201);
 		String id = getIdFromLocation(clientResponse.getHeaders().getLocation());
 
 		PurchaseOrder po = PurchaseOrder.findPurchaseOrder(Long.parseLong(id));
@@ -197,21 +186,17 @@ public class PurchaseOrderResourceIntegrationTest {
 
 		String json = resourceToJson(poResource);
 		HttpEntity<String> requestEntity = new HttpEntity<String>(json,
-				getHeaders("user" + ":" + "password"));
-
-		RestTemplate template = new RestTemplate();
+				RestHelper.getHeaders("user@rentit.com", "password"));
 
 		ResponseEntity<PurchaseOrderResource> clientResponse = template
 				.postForEntity(webappurl + "/rest/pos/", requestEntity,
 						PurchaseOrderResource.class);
-		assertTrue(clientResponse.getStatusCode().value() == Status.CREATED
-				.getStatusCode());
+		assertTrue(clientResponse.getStatusCode().value() == 201);
 
 		ResponseEntity<PurchaseOrderResource> clientResponse2 = template
 				.postForEntity(webappurl + "/rest/pos/", requestEntity,
 						PurchaseOrderResource.class);
-		assertTrue(clientResponse2.getStatusCode().value() != Status.CREATED
-				.getStatusCode());
+		assertTrue(clientResponse2.getStatusCode().value() != 201);
 	}
 
 	//
@@ -219,16 +204,13 @@ public class PurchaseOrderResourceIntegrationTest {
 	public void testRejectPO() {
 		long id = createPO(HireRequestStatus.PENDING_CONFIRMATION);
 		HttpEntity<String> requestEntity = new HttpEntity<String>(
-				getHeaders("user" + ":" + "password"));
-
-		RestTemplate template = new RestTemplate();
+				RestHelper.getHeaders("user@rentit.com", "password"));
 
 		ResponseEntity<PurchaseOrderResource> response = template.exchange(
 				webappurl + "/rest/pos/" + id + "/reject", HttpMethod.DELETE,
 				requestEntity, PurchaseOrderResource.class);
 
-		assertTrue(response.getStatusCode().value() == Status.OK
-				.getStatusCode());
+		assertTrue(response.getStatusCode().value() == 200);
 		HireRequestStatus status = PurchaseOrder.findPurchaseOrder(id)
 				.getStatus();
 		assertTrue(status.equals(HireRequestStatus.REJECTED));
@@ -240,14 +222,12 @@ public class PurchaseOrderResourceIntegrationTest {
 	public void testAcceptPO() {
 		long id = createPO(HireRequestStatus.PENDING_CONFIRMATION);
 		HttpEntity<String> requestEntity = new HttpEntity<String>(
-				getHeaders("user" + ":" + "password"));
-		RestTemplate template = new RestTemplate();
+				RestHelper.getHeaders("user@rentit.com", "password"));
 		ResponseEntity<PurchaseOrderResource> response = template.exchange(
 				webappurl + "/rest/pos/" + id + "/accept", HttpMethod.PUT,
 				requestEntity, PurchaseOrderResource.class);
 
-		assertTrue(response.getStatusCode().value() == Status.OK
-				.getStatusCode());
+		assertTrue(response.getStatusCode().value() == 200);
 
 		HireRequestStatus status = PurchaseOrder.findPurchaseOrder(id)
 				.getStatus();
@@ -267,15 +247,13 @@ public class PurchaseOrderResourceIntegrationTest {
 
 		String json = resourceToJson(poResource);
 		HttpEntity<String> requestEntity = new HttpEntity<String>(json,
-				getHeaders("user" + ":" + "password"));
+				RestHelper.getHeaders("user@rentit.com", "password"));
 
-		RestTemplate template = new RestTemplate();
 		ResponseEntity<PurchaseOrderResource> response = template.exchange(
 				webappurl + "/rest/pos/" + poId, HttpMethod.PUT, requestEntity,
 				PurchaseOrderResource.class);
 
-		assertTrue(response.getStatusCode().value() == Status.OK
-				.getStatusCode());
+		assertTrue(response.getStatusCode().value() == 200);
 		HireRequestStatus status = PurchaseOrder.findPurchaseOrder(poId)
 				.getStatus();
 		assertTrue(status.equals(HireRequestStatus.PENDING_CONFIRMATION));
@@ -291,18 +269,18 @@ public class PurchaseOrderResourceIntegrationTest {
 		PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
 		PurchaseOrderResource poResource = assembler
 				.getPurchaseOrderResource(po);
-		assertTrue(PurchaseOrderUpdate.countPurchaseOrderUpdates() == 1);
+		long l = PurchaseOrderUpdate.countPurchaseOrderUpdates();
+		assertTrue( l == 1);
 		String json = resourceToJson(poResource);
 
 		HttpEntity<String> requestEntity = new HttpEntity<String>(json,
-				getHeaders("user" + ":" + "password"));
+				RestHelper.getHeaders("user@rentit.com", "password"));
 
-		RestTemplate template = new RestTemplate();
 		ResponseEntity<PurchaseOrderResource> response = template.exchange(
 				webappurl + "/rest/pos/" + poId + "/updates", HttpMethod.POST,
 				requestEntity, PurchaseOrderResource.class);
 
-		assertTrue(response.getStatusCode().value() == Status.OK.getStatusCode());
+		assertTrue(response.getStatusCode().value() == 200);
 		HireRequestStatus status = PurchaseOrder.findPurchaseOrder(poId)
 				.getStatus();
 		assertTrue(status.equals(HireRequestStatus.PENDING_UPDATE));
@@ -317,15 +295,14 @@ public class PurchaseOrderResourceIntegrationTest {
 		long id = createPO(HireRequestStatus.PENDING_UPDATE);
 		long uid = createPOUpdate(id, 1);		
 		HttpEntity<String> requestEntity = new HttpEntity<String>(
-				getHeaders("user" + ":" + "password"));
+				RestHelper.getHeaders("user@rentit.com", "password"));
 
-		RestTemplate template = new RestTemplate();
 		ResponseEntity<PurchaseOrderResource> response = template.exchange(
 				webappurl + "/rest/pos/" + id
 				+ "/updates/" + uid + "/reject", HttpMethod.DELETE,
 				requestEntity, PurchaseOrderResource.class);
 		
-		assertTrue(response.getStatusCode().value() == Status.OK.getStatusCode());
+		assertTrue(response.getStatusCode().value() == 200);
 		HireRequestStatus status = PurchaseOrder.findPurchaseOrder(id)
 				.getStatus();
 		assertTrue(status.equals(HireRequestStatus.OPEN));
@@ -339,15 +316,14 @@ public class PurchaseOrderResourceIntegrationTest {
 		long uid = createPOUpdate(id, 5432100);
 		
 		HttpEntity<String> requestEntity = new HttpEntity<String>(
-				getHeaders("user" + ":" + "password"));
+				RestHelper.getHeaders("user@rentit.com", "password"));
 		
-		RestTemplate template = new RestTemplate();
 		ResponseEntity<PurchaseOrderResource> response = template.exchange(
 				webappurl + "/rest/pos/" + id
 				+ "/updates/" + uid + "/accept", HttpMethod.POST,
 				requestEntity, PurchaseOrderResource.class);
 		
-		assertTrue(response.getStatusCode().value() == Status.OK.getStatusCode());
+		assertTrue(response.getStatusCode().value() == 200);
 		HireRequestStatus status = PurchaseOrder.findPurchaseOrder(id)
 				.getStatus();
 		assertTrue(status.equals(HireRequestStatus.OPEN));
@@ -362,13 +338,12 @@ public class PurchaseOrderResourceIntegrationTest {
 		long id = createPO(HireRequestStatus.PENDING_CONFIRMATION);
 
 		HttpEntity<String> requestEntity = new HttpEntity<String>(
-				getHeaders("user" + ":" + "password"));
-		RestTemplate template = new RestTemplate();
+				RestHelper.getHeaders("user@rentit.com", "password"));
+
 		ResponseEntity<PurchaseOrderResource> response = template.exchange(
 				webappurl + "/rest/pos/" + id, HttpMethod.DELETE,
 				requestEntity, PurchaseOrderResource.class);
-		assertTrue(response.getStatusCode().value() == Status.OK
-				.getStatusCode());
+		assertTrue(response.getStatusCode().value() == 200);
 		assertTrue(PurchaseOrder.findPurchaseOrder(id).getStatus()
 				.equals(HireRequestStatus.CLOSED));
 
@@ -380,37 +355,24 @@ public class PurchaseOrderResourceIntegrationTest {
 		long id = createPO(HireRequestStatus.PENDING_CONFIRMATION);
 
 		HttpEntity<String> requestEntity = new HttpEntity<String>(
-				getHeaders("user" + ":" + "password"));
+				RestHelper.getHeaders("user@rentit.com", "password"));
 
-		RestTemplate template = new RestTemplate();
 		ResponseEntity<PurchaseOrderResource> response = template.exchange(
 				webappurl + "/rest/pos/" + id, HttpMethod.GET, requestEntity,
 				PurchaseOrderResource.class);
 
-		assertTrue(response.getStatusCode().value() == Status.OK
-				.getStatusCode());
+		assertTrue(response.getStatusCode().value() == 200);
 		PurchaseOrderResource poResource = response.getBody();
 		assertTrue(poResource.getTotalCost().intValue() == 2);
 		assertTrue(poResource.get_links().size() == 2);
 	}
 
-	private static HttpHeaders getHeaders(String auth) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
-		headers.setAccept(Arrays
-				.asList(org.springframework.http.MediaType.APPLICATION_JSON));
-		byte[] encodedAuthorisation = Base64.encode(auth.getBytes());
-		headers.add("Authorization", "Basic "
-				+ new String(encodedAuthorisation));
-		return headers;
-	}
-
-	private String resourceToJson(PurchaseOrderResource poResource) {
+	private String resourceToJson(Object resource) {
 		ObjectWriter ow = new ObjectMapper().writer()
 				.withDefaultPrettyPrinter();
 		String json = null;
 		try {
-			json = ow.writeValueAsString(poResource);
+			json = ow.writeValueAsString(resource);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
