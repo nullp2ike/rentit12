@@ -233,6 +233,7 @@ public class PurchaseOrderResourceIntegrationTest {
 				.getStatus();
 		assertTrue(status.equals(HireRequestStatus.OPEN));
 		assertTrue(response.getBody().get_links().size() == 2);
+		System.out.println(response.getBody());
 	}
 
 	// OK

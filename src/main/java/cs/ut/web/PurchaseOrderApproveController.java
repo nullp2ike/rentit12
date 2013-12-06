@@ -6,6 +6,9 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +18,9 @@ import org.springframework.web.client.RestTemplate;
 import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.bean.PurchaseOrderListDTO;
+import cs.ut.domain.rest.PurchaseOrderResource;
 import cs.ut.repository.PurchaseOrderRepository;
+import cs.ut.util.RestHelper;
 
 @RequestMapping("/purchaseorders/pending/**")
 @Controller
@@ -29,6 +34,12 @@ public class PurchaseOrderApproveController {
 	
 	@Value("${builditurl}")
 	String builditurl;
+	
+	@Value("${rentit.role.user}")
+	String rentitUser;
+	
+	@Value("${rentit.role.user.password}")
+	String rentitUserPassword;
 
     @RequestMapping(method = RequestMethod.GET)
     public String displayNewPurchaseOrders(HttpServletRequest request, ModelMap modelMap) {
@@ -46,19 +57,24 @@ public class PurchaseOrderApproveController {
      	String rejectComment = request.getParameter("rejectionReason");
     	String decision = request.getParameter("submit");;
 		RestTemplate template = new RestTemplate();
+ 		
+		HttpEntity<String> requestEntity = new HttpEntity<String>(
+				RestHelper.getHeaders(rentitUser, rentitUserPassword));
     	if(decision.equals("Approve")){
     		String acceptUrl = webappurl + "/rest/pos/" + selectedPurchaseOrder
 			+ "/accept";
-    		template.put(acceptUrl, PurchaseOrder.class);
-    		
+    		ResponseEntity<PurchaseOrderResource> resp = template.exchange(acceptUrl, HttpMethod.PUT, requestEntity, PurchaseOrderResource.class);
     	}else if(decision.equals("Reject")){
     		String rejectUrl = webappurl + "/rest/pos/" + selectedPurchaseOrder
 			+ "/reject";
-    		template.delete(rejectUrl, PurchaseOrder.class);
+    		template.exchange(rejectUrl, HttpMethod.DELETE, requestEntity, PurchaseOrderResource.class);
+    		System.out.println("untsakad");
     		long poId = Long.parseLong(selectedPurchaseOrder);
     		long phrId = PurchaseOrder.findPurchaseOrder(poId).getPlantHireRequestId();
+    		
     		String builditRejectUrl = builditurl + "/rest/phr/" + phrId + "/reject?comment=" + rejectComment;
-    		template.delete(builditRejectUrl);
+    		ResponseEntity<String> resp = template.exchange(builditRejectUrl, HttpMethod.DELETE, requestEntity, String.class);
+    		System.out.println(resp);
     	}else{
     		System.out.println("ERROR, this should not happen");
     	}

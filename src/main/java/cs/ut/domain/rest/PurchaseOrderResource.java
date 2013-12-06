@@ -24,4 +24,6 @@ public class PurchaseOrderResource extends ResourceSupport {
     private HireRequestStatus status;
 
     private PlantResource plantResource;
+    
+    private long plantHireRequestId;
 }

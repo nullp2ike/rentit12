@@ -6,3 +6,8 @@ insert into authorities VALUES (1, 'ROLE_ADMIN', 0);
 
 insert into assignments VALUES(0, 0, 0, 0);
 insert into assignments VALUES(1, 0, 1, 1);
+
+insert into plant VALUES(0, 'Nice', 'Tractor', 100, 0);
+insert into plant VALUES(1, 'Old', 'Truck', 2000, 0);
+
+

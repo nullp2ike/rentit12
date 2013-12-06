@@ -13,9 +13,7 @@
         <intercept-url pattern="/member/**" access="isAuthenticated()" />
         <intercept-url pattern="/resources/**" access="permitAll" />
         <intercept-url pattern="/login/**" access="permitAll" />
-        <intercept-url pattern="/PlantSOAPService**" access="permitAll" />
         <intercept-url pattern="/**" access="isAuthenticated()" />
-        <intercept-url pattern="/PurchaseOrderSOAPService**" access="permitAll" />
         <intercept-url pattern="/rest/plant/**" access="hasRole('ROLE_USER')" />
         <intercept-url pattern="/rest/pos/**" access="hasRole('ROLE_USER')" />
 		<http-basic/>

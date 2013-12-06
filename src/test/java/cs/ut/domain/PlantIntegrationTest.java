@@ -1,14 +1,11 @@
 package cs.ut.domain;
 import static org.junit.Assert.assertTrue;
 import cs.ut.repository.PlantRepository;
-
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
@@ -152,4 +149,9 @@ public class PlantIntegrationTest {
 			assertTrue(!plant.getName().equals("NotAvailablePlant"));
 		}
 	}
+
+	@Test
+    public void testDelete() {
+        
+    }
 }

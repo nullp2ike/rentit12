@@ -41,6 +41,7 @@ public class PurchaseOrderRestController {
 		po.setStartDate(res.getStartDate());
 		po.setStatus(HireRequestStatus.PENDING_CONFIRMATION);
 		po.setTotalCost(res.getTotalCost());
+		po.setPlantHireRequestId(res.getPlantHireRequestId());
 		po.persist();
 		
 		PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
@@ -140,8 +141,10 @@ public class PurchaseOrderRestController {
 				e.printStackTrace();
 			}
 			response = new ResponseEntity<>(resource, HttpStatus.OK);
-		} else
+		} else{
 			response = new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+		}
+		System.out.println(response);
 		return response;
 	}
 	
