@@ -1,11 +1,15 @@
 package cs.ut.domain;
 import static org.junit.Assert.assertTrue;
 import cs.ut.repository.PlantRepository;
+
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
@@ -123,7 +127,11 @@ public class PlantIntegrationTest {
 	
 	@Test
 	public void testGetAvailablePlantsByDateRange() {
-
+		DateTime startDate = new DateTime();
+		DateTime endDate = startDate.plusDays(7);
+		
+		List<Plant> availablePlants2 = plantRepository.findByDateRange(startDate.toDate(), endDate.toDate(), HireRequestStatus.PENDING_CONFIRMATION, HireRequestStatus.REJECTED, HireRequestStatus.CLOSED);
+		
 		long plantId;
 		Plant p = new Plant();
 		p.setDescription("Desc");
@@ -133,18 +141,15 @@ public class PlantIntegrationTest {
 		plantId = p.getId();
 
 		PurchaseOrder po = new PurchaseOrder();
-		DateTime startDate = new DateTime();
-		startDate.minusDays(14);
-		DateTime endDate = startDate.minusDays(7);
+		
 		po.setEndDate(endDate.toDate());
 		po.setPlant(Plant.findPlant(plantId));	
 		po.setStartDate(startDate.toDate());
-		po.setStatus(HireRequestStatus.PENDING_CONFIRMATION);
+		po.setStatus(HireRequestStatus.OPEN);
 		po.setTotalCost(new BigDecimal(2));
 		po.persist();
-		po.flush();
 
-		List<Plant> availablePlants = plantRepository.findByDateRange(startDate.toDate(), endDate.toDate());
+		List<Plant> availablePlants = plantRepository.findByDateRange(startDate.toDate(), endDate.toDate(), HireRequestStatus.PENDING_CONFIRMATION, HireRequestStatus.REJECTED, HireRequestStatus.CLOSED);
 		for (Plant plant : availablePlants) {
 			assertTrue(!plant.getName().equals("NotAvailablePlant"));
 		}

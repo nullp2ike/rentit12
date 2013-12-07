@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.Plant;
 import cs.ut.domain.rest.PlantResource;
 import cs.ut.domain.rest.PlantResourceAssembler;
@@ -43,7 +44,7 @@ public class PlantRestController {
 		List<Plant> plantList;
 		
 		if(startDateString != null && endDateString != null){
-			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy");
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 			
 			Date startD = null;
 			Date endD = null;
@@ -55,7 +56,7 @@ public class PlantRestController {
 			}
 	    	Date start = new DateTime(startD).toDateMidnight().toDate();
 	    	Date end = new DateTime(endD).toDateMidnight().toDate();
-			plantList = repository.findByDateRange(start, end);
+			plantList = repository.findByDateRange(start, end, HireRequestStatus.PENDING_CONFIRMATION, HireRequestStatus.REJECTED, HireRequestStatus.CLOSED);
 		} else{
 			plantList = repository.findAll();
 		}

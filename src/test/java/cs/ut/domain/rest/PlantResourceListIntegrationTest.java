@@ -142,7 +142,7 @@ public class PlantResourceListIntegrationTest {
 		po.setEndDate(endDate);
 		po.setPlant(Plant.findPlant(plantId));
 		po.setStartDate(startDate);
-		po.setStatus(HireRequestStatus.PENDING_CONFIRMATION);
+		po.setStatus(HireRequestStatus.OPEN);
 		po.setTotalCost(new BigDecimal(2));
 		po.persist();
 		return po.getId();
@@ -186,9 +186,9 @@ public class PlantResourceListIntegrationTest {
 		DateTime tomorrow = today.plusDays(1);
 		createPO(id, today.toDate(), tomorrow.toDate());
 
-		String startDateString = new SimpleDateFormat("dd-MM-yy").format(today
+		String startDateString = new SimpleDateFormat("dd-MM-yyyy").format(today
 				.toDate());
-		String endDateString = new SimpleDateFormat("dd-MM-yy").format(tomorrow
+		String endDateString = new SimpleDateFormat("dd-MM-yyyy").format(tomorrow
 				.toDate());
 
 		ResponseEntity<PlantResourceList> response2 = template.exchange(
@@ -200,6 +200,7 @@ public class PlantResourceListIntegrationTest {
 
 		PlantResourceList plantListAvailable = response2.getBody();
 		assertTrue(plantListAvailable.getListOfPlantResources().size() == allPlantsSize - 1);
+
 
 	}
 }
