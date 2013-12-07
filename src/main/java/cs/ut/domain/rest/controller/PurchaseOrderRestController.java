@@ -23,6 +23,7 @@ import cs.ut.domain.rest.PurchaseOrderResource;
 import cs.ut.domain.rest.PurchaseOrderResourceAssembler;
 import cs.ut.domain.service.PurchaseOrderNotFound;
 import cs.ut.domain.service.PurchaseOrderService;
+import cs.ut.repository.PlantRepository;
 import cs.ut.util.ExtendedLink;
 
 @Controller
@@ -32,9 +33,21 @@ public class PurchaseOrderRestController {
 	@Autowired
 	PurchaseOrderService poService;
 	
+	@Autowired
+	PlantRepository repository;
+	
 	//OK
 	@RequestMapping(method = RequestMethod.POST, value = "")
 	public ResponseEntity<PurchaseOrderResource> createPO(@RequestBody PurchaseOrderResource res) {
+		
+		
+		if( repository.findPlantAvailablilityByDateRange(res.getStartDate(), res.getEndDate(), res.getPlantResource().getIdentifier()).size() == 0){
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("reason", "Plant unavailable for the selected dates");
+			ResponseEntity<PurchaseOrderResource> response = new ResponseEntity<PurchaseOrderResource>(res, headers, HttpStatus.CONFLICT);
+				return response;
+		}
+		
 		PurchaseOrder po = new PurchaseOrder();
 		po.setEndDate(res.getEndDate());
 		po.setPlant(Plant.findPlant(res.getPlantResource().getIdentifier()));

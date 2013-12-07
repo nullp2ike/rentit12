@@ -1,6 +1,7 @@
 package cs.ut.domain.rest;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.roo.addon.test.RooIntegrationTest;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import cs.ut.domain.HireRequestStatus;
@@ -193,10 +195,15 @@ public class PurchaseOrderResourceIntegrationTest {
 						PurchaseOrderResource.class);
 		assertTrue(clientResponse.getStatusCode().value() == 201);
 
+		try{
 		ResponseEntity<PurchaseOrderResource> clientResponse2 = template
 				.postForEntity(webappurl + "/rest/pos/", requestEntity,
 						PurchaseOrderResource.class);
-		assertTrue(clientResponse2.getStatusCode().value() != 201);
+		}catch(HttpClientErrorException e){
+			assertTrue(e.getMessage().contains("409 Conflict"));
+			return;
+		}
+		fail();
 	}
 
 	//

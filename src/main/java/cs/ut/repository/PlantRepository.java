@@ -17,4 +17,9 @@ public interface PlantRepository {
 	@Transactional(readOnly = true)
 	List<Plant> findByDateRange(@Param("startDate") Date startD, @Param("endDate") Date endD);
 	
+	@Query("SELECT p FROM Plant AS p WHERE p.id = :plantId AND p.id NOT IN (SELECT po.plant FROM PurchaseOrder po WHERE po.startDate >= :startDate and po.endDate <= :endDate)")
+	
+	@Transactional(readOnly = true)
+	List<Plant> findPlantAvailablilityByDateRange(@Param("startDate") Date startD, @Param("endDate") Date endD, @Param("plantId") long plantId);
+	
 }

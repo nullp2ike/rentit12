@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.Plant;
 import cs.ut.domain.PurchaseOrder;
+import cs.ut.domain.PurchaseOrderUpdate;
 import cs.ut.security.Assignments;
 import cs.ut.security.Authorities;
 import cs.ut.security.Users;
@@ -52,6 +53,22 @@ public class PlantResourceListIntegrationTest {
 	}
 
 	private static void removeStuff() {
+		
+		List<PurchaseOrderUpdate> poU = PurchaseOrderUpdate.findAllPurchaseOrderUpdates();
+		for (PurchaseOrderUpdate purchasOrderUpdate : poU) {
+			purchasOrderUpdate.remove();
+		}
+		
+		List<PurchaseOrder> po = PurchaseOrder.findAllPurchaseOrders();
+		for (PurchaseOrder purchaseOrder : po) {
+			purchaseOrder.remove();
+		}
+		
+		List<Plant> plants = Plant.findAllPlants();
+		for (Plant plant : plants) {
+			plant.remove();
+		}
+		
 		List<Assignments> assignments = Assignments.findAllAssignmentses();
 		for (Assignments assignments2 : assignments) {
 			assignments2.remove();
@@ -164,7 +181,6 @@ public class PlantResourceListIntegrationTest {
 
 		PlantResourceList plantList = response.getBody();
 		long allPlantsSize = plantList.getListOfPlantResources().size();
-
 		// Then createPO for one plant and make sure it is not available
 		DateTime today = new DateTime().toDateMidnight().toDateTime();
 		DateTime tomorrow = today.plusDays(1);
