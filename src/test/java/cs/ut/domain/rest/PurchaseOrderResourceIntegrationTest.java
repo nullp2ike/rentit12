@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -130,13 +131,14 @@ public class PurchaseOrderResourceIntegrationTest {
 		return po.getId();
 	}
 
-	private long createPOUpdate(long id, int totalCost) {
+	private long createPOUpdate(long id, int totalCost, PurchaseOrder po) {
 		PurchaseOrderUpdate poUpdate = new PurchaseOrderUpdate();
 		poUpdate.setTotalCost(new BigDecimal(totalCost));
 		poUpdate.setEndDate(new Date());
 		poUpdate.setPlant(Plant.findPlant(plantId));
 		poUpdate.setStartDate(new Date());
 		poUpdate.setPurchaseOrderId(id);
+		poUpdate.setStatus(po.getStatus());
 		poUpdate.persist();
 		return poUpdate.getId();
 	}
@@ -194,6 +196,13 @@ public class PurchaseOrderResourceIntegrationTest {
 				.postForEntity(webappurl + "/rest/pos/", requestEntity,
 						PurchaseOrderResource.class);
 		assertTrue(clientResponse.getStatusCode().value() == 201);
+		
+		Link acceptLink = clientResponse.getBody().get_link("acceptPO");
+		String acceptUrl = acceptLink.getHref();
+		
+		ResponseEntity<PurchaseOrderResource> response = template.exchange(
+				acceptUrl, HttpMethod.PUT,
+				requestEntity, PurchaseOrderResource.class);
 
 		try{
 		ResponseEntity<PurchaseOrderResource> clientResponse2 = template
@@ -272,15 +281,17 @@ public class PurchaseOrderResourceIntegrationTest {
 	@Test
 	public void testRequestPOUpdate() {
 		long poId = createPO(HireRequestStatus.OPEN);
-
+		long numOfPOUpdates = PurchaseOrderUpdate.countPurchaseOrderUpdates();
+		assertTrue( numOfPOUpdates == 1);
+		
 		PurchaseOrder po = PurchaseOrder.findPurchaseOrder(poId);
 		PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
 		PurchaseOrderResource poResource = assembler
 				.getPurchaseOrderResource(po);
-		long l = PurchaseOrderUpdate.countPurchaseOrderUpdates();
-		assertTrue( l == 1);
+		poResource.setStatus(HireRequestStatus.REJECTED);
+		poResource.setTotalCost(new BigDecimal(23232));
+		
 		String json = resourceToJson(poResource);
-
 		HttpEntity<String> requestEntity = new HttpEntity<String>(json,
 				RestHelper.getHeaders("user@rentit.com", "password"));
 
@@ -295,13 +306,15 @@ public class PurchaseOrderResourceIntegrationTest {
 		assertTrue(response.getBody().get_links().size() == 2);
 		assertTrue(PurchaseOrderUpdate.countPurchaseOrderUpdates() == 2);
 		// TODO Test here that the cost is present in db
+		
+//		HireRequestStatus updateStatus = PurchaseOrderUpdate.findPurchaseOrderUpdate(id);
 	}
 
 	// OK
 	@Test
 	public void testRejectPOUpdate() {
 		long id = createPO(HireRequestStatus.PENDING_UPDATE);
-		long uid = createPOUpdate(id, 1);		
+		long uid = createPOUpdate(id, 1,PurchaseOrder.findPurchaseOrder(id));		
 		HttpEntity<String> requestEntity = new HttpEntity<String>(
 				RestHelper.getHeaders("user@rentit.com", "password"));
 
@@ -321,7 +334,7 @@ public class PurchaseOrderResourceIntegrationTest {
 	@Test
 	public void testAcceptPOUpdate() {
 		long id = createPO(HireRequestStatus.PENDING_UPDATE);
-		long uid = createPOUpdate(id, 5432100);
+		long uid = createPOUpdate(id, 5432100, PurchaseOrder.findPurchaseOrder(id));
 		
 		HttpEntity<String> requestEntity = new HttpEntity<String>(
 				RestHelper.getHeaders("user@rentit.com", "password"));

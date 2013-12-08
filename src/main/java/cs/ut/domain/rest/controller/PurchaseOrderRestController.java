@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,8 @@ public class PurchaseOrderRestController {
 	public ResponseEntity<PurchaseOrderResource> createPO(@RequestBody PurchaseOrderResource res) {
 		
 		
-		if( repository.findPlantAvailablilityByDateRange(res.getStartDate(), res.getEndDate(), res.getPlantResource().getIdentifier()).size() == 0){
+		if( repository.findPlantAvailablilityByDateRange(res.getStartDate(), res.getEndDate(), res.getPlantResource().getIdentifier(),
+				HireRequestStatus.PENDING_CONFIRMATION, HireRequestStatus.REJECTED, HireRequestStatus.CLOSED).size() == 0){
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("reason", "Plant unavailable for the selected dates");
 			ResponseEntity<PurchaseOrderResource> response = new ResponseEntity<PurchaseOrderResource>(res, headers, HttpStatus.CONFLICT);
@@ -164,13 +166,13 @@ public class PurchaseOrderRestController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "{id}/updates")
 	public ResponseEntity<PurchaseOrderResource> requestPOUpdate(@PathVariable("id") Long id, @RequestBody PurchaseOrderResource res){
+		System.out.println("Res: " + res);
 		PurchaseOrder po = PurchaseOrder.findPurchaseOrder(id);
 		ResponseEntity<PurchaseOrderResource> response;
 		
 		if (po.getStatus().equals(HireRequestStatus.OPEN)) {
 			po.setStatus(HireRequestStatus.PENDING_UPDATE);
 			po.persist();
-			
 			
 			//TODO Might have to check here for an existing update first		
 			PurchaseOrderUpdate poUpdate = new PurchaseOrderUpdate();
@@ -179,6 +181,7 @@ public class PurchaseOrderRestController {
 			poUpdate.setPlant(Plant.findPlant(res.getPlantResource().getIdentifier()));
 			poUpdate.setStartDate(res.getStartDate());
 			poUpdate.setTotalCost(res.getTotalCost());
+			poUpdate.setStatus(res.getStatus());
 			poUpdate.persist();
 			
 			PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();

@@ -67,3 +67,4 @@ web mvc scaffold --class ~.web.AssignmentController --path /security/assignments
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-12-05 15:51:19
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-12-06 20:47:51
 // Spring Roo 1.2.4.RELEASE [rev 75337cf] log closed at 2013-12-06 23:24:46
+// Spring Roo 1.2.4.RELEASE [rev 75337cf] log opened at 2013-12-08 10:48:29

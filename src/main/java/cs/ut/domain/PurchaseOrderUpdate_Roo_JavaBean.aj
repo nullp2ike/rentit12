@@ -3,6 +3,7 @@
 
 package cs.ut.domain;
 
+import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.Plant;
 import cs.ut.domain.PurchaseOrderUpdate;
 import java.math.BigDecimal;
@@ -32,6 +33,14 @@ privileged aspect PurchaseOrderUpdate_Roo_JavaBean {
     
     public void PurchaseOrderUpdate.setTotalCost(BigDecimal totalCost) {
         this.totalCost = totalCost;
+    }
+    
+    public HireRequestStatus PurchaseOrderUpdate.getStatus() {
+        return this.status;
+    }
+    
+    public void PurchaseOrderUpdate.setStatus(HireRequestStatus status) {
+        this.status = status;
     }
     
     public Plant PurchaseOrderUpdate.getPlant() {

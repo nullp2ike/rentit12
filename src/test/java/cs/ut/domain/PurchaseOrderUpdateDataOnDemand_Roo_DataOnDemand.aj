@@ -3,6 +3,7 @@
 
 package cs.ut.domain;
 
+import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.Plant;
 import cs.ut.domain.PlantDataOnDemand;
 import cs.ut.domain.PurchaseOrderUpdate;
@@ -38,6 +39,7 @@ privileged aspect PurchaseOrderUpdateDataOnDemand_Roo_DataOnDemand {
         setPlant(obj, index);
         setPurchaseOrderId(obj, index);
         setStartDate(obj, index);
+        setStatus(obj, index);
         setTotalCost(obj, index);
         return obj;
     }
@@ -60,6 +62,11 @@ privileged aspect PurchaseOrderUpdateDataOnDemand_Roo_DataOnDemand {
     public void PurchaseOrderUpdateDataOnDemand.setStartDate(PurchaseOrderUpdate obj, int index) {
         Date startDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setStartDate(startDate);
+    }
+    
+    public void PurchaseOrderUpdateDataOnDemand.setStatus(PurchaseOrderUpdate obj, int index) {
+        HireRequestStatus status = HireRequestStatus.class.getEnumConstants()[0];
+        obj.setStatus(status);
     }
     
     public void PurchaseOrderUpdateDataOnDemand.setTotalCost(PurchaseOrderUpdate obj, int index) {
