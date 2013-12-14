@@ -181,7 +181,7 @@ public class PurchaseOrderRestController {
 			poUpdate.setPlant(Plant.findPlant(res.getPlantResource().getIdentifier()));
 			poUpdate.setStartDate(res.getStartDate());
 			poUpdate.setTotalCost(res.getTotalCost());
-			poUpdate.setStatus(res.getStatus());
+			poUpdate.setStatus(HireRequestStatus.PENDING_UPDATE);
 			poUpdate.persist();
 			
 			PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
