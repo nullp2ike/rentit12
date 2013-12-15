@@ -213,6 +213,10 @@ public class PurchaseOrderRestController {
 			po.setStatus(HireRequestStatus.OPEN);
 			po.persist();
 			
+			PurchaseOrderUpdate pou = PurchaseOrderUpdate.findPurchaseOrderUpdate(uid);
+			pou.setStatus(HireRequestStatus.OPEN);
+			pou.persist();
+			
 			PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
 			PurchaseOrderResource resource = assembler.toResource(po);
 
@@ -243,7 +247,11 @@ public class PurchaseOrderRestController {
 			po.setStartDate(poUpdate.getStartDate());
 			po.setTotalCost(poUpdate.getTotalCost());
 			po.setStatus(HireRequestStatus.OPEN);
-			po.persist();
+			po.merge();
+			
+			PurchaseOrderUpdate pou = PurchaseOrderUpdate.findPurchaseOrderUpdate(uid);
+			pou.setStatus(HireRequestStatus.OPEN);
+			pou.merge();
 			
 			PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
 			PurchaseOrderResource resource = assembler.toResource(po);

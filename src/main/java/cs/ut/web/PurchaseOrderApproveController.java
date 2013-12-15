@@ -55,7 +55,7 @@ public class PurchaseOrderApproveController {
     public String acceptOrRejectPO(@Valid PurchaseOrderListDTO poDTO, HttpServletRequest request, ModelMap modelMap) {
      	String selectedPurchaseOrder = request.getParameter("radio");
      	String rejectComment = request.getParameter("rejectionReason");
-    	String decision = request.getParameter("submit");;
+    	String decision = request.getParameter("submit");
 		RestTemplate template = new RestTemplate();
  		
 		HttpEntity<String> requestEntity = new HttpEntity<String>(
@@ -75,10 +75,8 @@ public class PurchaseOrderApproveController {
     		String builditRejectUrl = builditurl + "/rest/phr/" + phrId + "/reject?comment=" + rejectComment;
     		ResponseEntity<String> resp = template.exchange(builditRejectUrl, HttpMethod.DELETE, requestEntity, String.class);
     		System.out.println(resp);
-    	}else{
-    		System.out.println("ERROR, this should not happen");
     	}
-   
+    	
     	PurchaseOrderListDTO po = new PurchaseOrderListDTO();
     	List<PurchaseOrder> orderList = repository.findByStatus(HireRequestStatus.PENDING_CONFIRMATION);
     	po.setOrderList(orderList);

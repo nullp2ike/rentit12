@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.PurchaseOrder;
+import cs.ut.domain.PurchaseOrderUpdate;
 
 @RooJpaRepository(domainType = PurchaseOrder.class)
 public interface PurchaseOrderRepository {
@@ -20,5 +21,11 @@ public interface PurchaseOrderRepository {
 	
 	@Transactional(readOnly = true)
 	List<PurchaseOrder> findForSendingInvoice(@Param("status") HireRequestStatus status);
+	
+	@Query("SELECT pou FROM PurchaseOrderUpdate AS pou WHERE pou.status = :status")
+	
+	@Transactional(readOnly = true)
+	List<PurchaseOrderUpdate> findUpdatesByStatus(@Param("status") HireRequestStatus status);
+	
 	
 }

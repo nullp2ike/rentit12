@@ -15,6 +15,7 @@
             <menu:category id="c_controller" z="nj8Dm3hojIyIEyPkwE1UMDIs+K8=">
                 <menu:item id="i_controller__purchaseorders_newindex_id" messageCode="global_generic" url="/purchaseorders/pending/list" z="user-managed"/>
                 <menu:item id="i_controller__purchaseorder_approvedindex_id" messageCode="global_generic" url="/purchaseorders/approved/list" z="user-managed"/>
+                <menu:item id="i_purchaseorder_updates_list" url="/purchaseorders/updates/list" z="user-managed"/>
             </menu:category>
         </sec:authorize>
         <sec:authorize ifAllGranted="ROLE_ADMIN">

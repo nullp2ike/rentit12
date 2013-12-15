@@ -4,6 +4,7 @@
 package cs.ut.domain.bean;
 
 import cs.ut.domain.PurchaseOrder;
+import cs.ut.domain.PurchaseOrderUpdate;
 import cs.ut.domain.bean.PurchaseOrderListDTO;
 import java.util.List;
 
@@ -15,6 +16,14 @@ privileged aspect PurchaseOrderListDTO_Roo_JavaBean {
     
     public void PurchaseOrderListDTO.setOrderList(List<PurchaseOrder> orderList) {
         this.orderList = orderList;
+    }
+    
+    public List<PurchaseOrderUpdate> PurchaseOrderListDTO.getPoUpdateList() {
+        return this.poUpdateList;
+    }
+    
+    public void PurchaseOrderListDTO.setPoUpdateList(List<PurchaseOrderUpdate> poUpdateList) {
+        this.poUpdateList = poUpdateList;
     }
     
     public int PurchaseOrderListDTO.getRadio() {
