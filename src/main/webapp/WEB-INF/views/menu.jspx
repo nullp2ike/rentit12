@@ -10,11 +10,8 @@
             </menu:category>
             <menu:category id="c_purchaseorder" z="user-managed">
                 <menu:item id="i_purchaseorder_list" messageCode="global_menu_list" url="/purchaseorders?page=1&amp;size=${empty param.size ? 10 : param.size}" z="DHer7WK9MJB49FXJX9B6Kds2DxY="/>
-                <menu:item id="i_purchaseorder_new" messageCode="global_menu_new" url="/purchaseorders?form" z="I6gpOtV3+H+iGlPgmv55Zhufszk="/>
-            </menu:category>
-            <menu:category id="c_controller" z="nj8Dm3hojIyIEyPkwE1UMDIs+K8=">
-                <menu:item id="i_controller__purchaseorders_newindex_id" messageCode="global_generic" url="/purchaseorders/pending/list" z="user-managed"/>
-                <menu:item id="i_controller__purchaseorder_approvedindex_id" messageCode="global_generic" url="/purchaseorders/approved/list" z="user-managed"/>
+                <menu:item id="i_purchaseorder_accept_list" url="/purchaseorders/pending/list" z="user-managed"/>
+                <menu:item id="i_invoice_send" url="/purchaseorders/approved/list" z="user-managed"/>
                 <menu:item id="i_purchaseorder_updates_list" url="/purchaseorders/updates/list" z="user-managed"/>
             </menu:category>
         </sec:authorize>
