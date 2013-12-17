@@ -56,7 +56,7 @@ public class PlantRestController {
 			}
 	    	Date start = new DateTime(startD).toDateMidnight().toDate();
 	    	Date end = new DateTime(endD).toDateMidnight().toDate();
-			plantList = repository.findByDateRange(start, end, HireRequestStatus.PENDING_CONFIRMATION, HireRequestStatus.REJECTED, HireRequestStatus.CLOSED);
+			plantList = repository.findByDateRange(start, end, HireRequestStatus.PENDING_CONFIRMATION);
 		} else{
 			plantList = repository.findAll();
 		}

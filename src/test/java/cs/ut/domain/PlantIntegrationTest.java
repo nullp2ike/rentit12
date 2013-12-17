@@ -130,7 +130,7 @@ public class PlantIntegrationTest {
 		DateTime startDate = new DateTime();
 		DateTime endDate = startDate.plusDays(7);
 		
-		List<Plant> availablePlants2 = plantRepository.findByDateRange(startDate.toDate(), endDate.toDate(), HireRequestStatus.PENDING_CONFIRMATION, HireRequestStatus.REJECTED, HireRequestStatus.CLOSED);
+		List<Plant> availablePlants2 = plantRepository.findByDateRange(startDate.toDate(), endDate.toDate(), HireRequestStatus.PENDING_CONFIRMATION);
 		
 		long plantId;
 		Plant p = new Plant();
@@ -149,7 +149,7 @@ public class PlantIntegrationTest {
 		po.setTotalCost(new BigDecimal(2));
 		po.persist();
 
-		List<Plant> availablePlants = plantRepository.findByDateRange(startDate.toDate(), endDate.toDate(), HireRequestStatus.PENDING_CONFIRMATION, HireRequestStatus.REJECTED, HireRequestStatus.CLOSED);
+		List<Plant> availablePlants = plantRepository.findByDateRange(startDate.toDate(), endDate.toDate(), HireRequestStatus.PENDING_CONFIRMATION);
 		for (Plant plant : availablePlants) {
 			assertTrue(!plant.getName().equals("NotAvailablePlant"));
 		}
