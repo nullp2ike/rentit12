@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RooJpaRepository(domainType = Plant.class)
 public interface PlantRepository {
 	
-	@Query("SELECT p FROM Plant AS p WHERE p.id NOT IN (SELECT po.plant FROM PurchaseOrder po WHERE po.startDate >= :startDate and po.startDate <= :endDate and po.endDate <= :endDate and po.endDate >= :startDate and po.status != :pendingConfirmation)")
+	@Query("SELECT p FROM Plant AS p WHERE p.id NOT IN (SELECT po.plant FROM PurchaseOrder po WHERE po.startDate >= :startDate and po.endDate <= :endDate and po.status != :pendingConfirmation)")
 	
 	@Transactional(readOnly = true)
 	List<Plant> findByDateRange(@Param("startDate") Date startD, @Param("endDate") Date endD, @Param("pendingConfirmation") HireRequestStatus pendingConfirmation);

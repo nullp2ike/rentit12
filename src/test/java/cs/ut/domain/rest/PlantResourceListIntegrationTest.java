@@ -186,9 +186,9 @@ public class PlantResourceListIntegrationTest {
 		DateTime tomorrow = today.plusDays(1);
 		createPO(id, today.toDate(), tomorrow.toDate());
 
-		String startDateString = new SimpleDateFormat("MM-dd-yyyy").format(today
+		String startDateString = new SimpleDateFormat("dd-MM-yy").format(today
 				.toDate());
-		String endDateString = new SimpleDateFormat("MM-dd-yyyy").format(tomorrow
+		String endDateString = new SimpleDateFormat("dd-MM-yy").format(tomorrow
 				.toDate());
 
 		ResponseEntity<PlantResourceList> response2 = template.exchange(

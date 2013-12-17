@@ -44,7 +44,7 @@ public class PlantRestController {
 		List<Plant> plantList;
 		
 		if(startDateString != null && endDateString != null){
-			SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy");
 			
 			Date startD = null;
 			Date endD = null;
