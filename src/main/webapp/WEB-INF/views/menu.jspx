@@ -13,6 +13,7 @@
                 <menu:item id="i_purchaseorder_accept_list" url="/purchaseorders/pending/list" z="user-managed"/>
                 <menu:item id="i_invoice_send" url="/purchaseorders/approved/list" z="user-managed"/>
                 <menu:item id="i_purchaseorder_updates_list" url="/purchaseorders/updates/list" z="user-managed"/>
+                <menu:item id="i_purchaseorder_plant_status_list" url ="/purchaseorders/delivery/list" z="user-managed"/>
             </menu:category>
         </sec:authorize>
         <sec:authorize ifAllGranted="ROLE_ADMIN">

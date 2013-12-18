@@ -25,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 
 import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.Plant;
+import cs.ut.domain.PlantStatus;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.PurchaseOrderUpdate;
 import cs.ut.security.Assignments;
@@ -127,6 +128,7 @@ public class PurchaseOrderResourceIntegrationTest {
 		po.setStatus(status);
 		po.setTotalCost(new BigDecimal(2));
 		po.setPlantHireRequestId(4);
+		po.setPlantStatus(PlantStatus.PRESENT);
 		po.persist();
 		return po.getId();
 	}

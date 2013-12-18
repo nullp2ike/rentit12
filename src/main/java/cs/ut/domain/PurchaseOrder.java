@@ -10,10 +10,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.DefaultValue;
 
 @RooJavaBean
 @RooToString
@@ -56,4 +58,10 @@ public class PurchaseOrder {
     
     @NotNull
     boolean invoiceSent;
+    
+    /**
+     */
+    @Enumerated
+    @NotNull
+    private PlantStatus plantStatus;
 }

@@ -3,6 +3,7 @@
 
 package cs.ut.domain.bean;
 
+import cs.ut.domain.PlantStatus;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.PurchaseOrderUpdate;
 import cs.ut.domain.bean.PurchaseOrderListDTO;
@@ -32,6 +33,14 @@ privileged aspect PurchaseOrderListDTO_Roo_JavaBean {
     
     public void PurchaseOrderListDTO.setRadio(int radio) {
         this.radio = radio;
+    }
+    
+    public PlantStatus PurchaseOrderListDTO.getPlantStatus() {
+        return this.plantStatus;
+    }
+    
+    public void PurchaseOrderListDTO.setPlantStatus(PlantStatus plantStatus) {
+        this.plantStatus = plantStatus;
     }
     
 }

@@ -5,6 +5,7 @@ package cs.ut.domain;
 
 import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.Plant;
+import cs.ut.domain.PlantStatus;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.PurchaseOrderController;
 import cs.ut.repository.PlantRepository;
@@ -117,6 +118,7 @@ privileged aspect PurchaseOrderController_Roo_Controller {
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("hirerequeststatuses", Arrays.asList(HireRequestStatus.values()));
         uiModel.addAttribute("plants", plantRepository.findAll());
+        uiModel.addAttribute("plantstatuses", Arrays.asList(PlantStatus.values()));
     }
     
     String PurchaseOrderController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

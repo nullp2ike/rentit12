@@ -5,6 +5,7 @@ package cs.ut.domain;
 
 import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.Plant;
+import cs.ut.domain.PlantStatus;
 import cs.ut.domain.PurchaseOrder;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -65,6 +66,14 @@ privileged aspect PurchaseOrder_Roo_JavaBean {
     
     public void PurchaseOrder.setInvoiceSent(boolean invoiceSent) {
         this.invoiceSent = invoiceSent;
+    }
+    
+    public PlantStatus PurchaseOrder.getPlantStatus() {
+        return this.plantStatus;
+    }
+    
+    public void PurchaseOrder.setPlantStatus(PlantStatus plantStatus) {
+        this.plantStatus = plantStatus;
     }
     
 }

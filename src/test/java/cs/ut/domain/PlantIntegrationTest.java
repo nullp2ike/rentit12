@@ -147,6 +147,7 @@ public class PlantIntegrationTest {
 		po.setStartDate(startDate.toDate());
 		po.setStatus(HireRequestStatus.OPEN);
 		po.setTotalCost(new BigDecimal(2));
+		po.setPlantStatus(PlantStatus.PRESENT);
 		po.persist();
 
 		List<Plant> availablePlants = plantRepository.findByDateRange(startDate.toDate(), endDate.toDate(), HireRequestStatus.PENDING_CONFIRMATION);

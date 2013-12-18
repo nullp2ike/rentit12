@@ -6,6 +6,7 @@ package cs.ut.domain;
 import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.Plant;
 import cs.ut.domain.PlantDataOnDemand;
+import cs.ut.domain.PlantStatus;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.PurchaseOrderDataOnDemand;
 import cs.ut.repository.PurchaseOrderRepository;
@@ -43,6 +44,7 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
         setInvoiceSent(obj, index);
         setPlant(obj, index);
         setPlantHireRequestId(obj, index);
+        setPlantStatus(obj, index);
         setStartDate(obj, index);
         setStatus(obj, index);
         setTotalCost(obj, index);
@@ -67,6 +69,11 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
     public void PurchaseOrderDataOnDemand.setPlantHireRequestId(PurchaseOrder obj, int index) {
         Long plantHireRequestId = new Integer(index).longValue();
         obj.setPlantHireRequestId(plantHireRequestId);
+    }
+    
+    public void PurchaseOrderDataOnDemand.setPlantStatus(PurchaseOrder obj, int index) {
+        PlantStatus plantStatus = PlantStatus.class.getEnumConstants()[0];
+        obj.setPlantStatus(plantStatus);
     }
     
     public void PurchaseOrderDataOnDemand.setStartDate(PurchaseOrder obj, int index) {

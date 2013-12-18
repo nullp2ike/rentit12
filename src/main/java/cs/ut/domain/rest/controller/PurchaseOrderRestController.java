@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 import cs.ut.domain.HireRequestStatus;
 import cs.ut.domain.Plant;
+import cs.ut.domain.PlantStatus;
 import cs.ut.domain.PurchaseOrder;
 import cs.ut.domain.PurchaseOrderUpdate;
 import cs.ut.domain.rest.PurchaseOrderResource;
@@ -57,6 +58,7 @@ public class PurchaseOrderRestController {
 		po.setStatus(HireRequestStatus.PENDING_CONFIRMATION);
 		po.setTotalCost(res.getTotalCost());
 		po.setPlantHireRequestId(res.getPlantHireRequestId());
+		po.setPlantStatus(PlantStatus.PRESENT);
 		po.persist();
 		
 		PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
@@ -166,11 +168,18 @@ public class PurchaseOrderRestController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "{id}/updates")
 	public ResponseEntity<PurchaseOrderResource> requestPOUpdate(@PathVariable("id") Long id, @RequestBody PurchaseOrderResource res){
-		System.out.println("Res: " + res);
 		PurchaseOrder po = PurchaseOrder.findPurchaseOrder(id);
 		ResponseEntity<PurchaseOrderResource> response;
 		
 		if (po.getStatus().equals(HireRequestStatus.OPEN)) {
+			
+			if(!po.getPlantStatus().equals(PlantStatus.PRESENT) && res.getStatus().equals(HireRequestStatus.REJECTED)){
+				//Need to add a meaningful method here to say that only PO which plants are not yet dispatched can be canceled
+				PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
+				PurchaseOrderResource resource = assembler.toResource(po);
+				response = new ResponseEntity<>(resource,
+						HttpStatus.METHOD_NOT_ALLOWED);
+			}
 			po.setStatus(HireRequestStatus.PENDING_UPDATE);
 			po.persist();
 			
@@ -181,7 +190,7 @@ public class PurchaseOrderRestController {
 			poUpdate.setPlant(Plant.findPlant(res.getPlantResource().getIdentifier()));
 			poUpdate.setStartDate(res.getStartDate());
 			poUpdate.setTotalCost(res.getTotalCost());
-			poUpdate.setStatus(HireRequestStatus.PENDING_UPDATE);
+			poUpdate.setStatus(res.getStatus());
 			poUpdate.persist();
 			
 			PurchaseOrderResourceAssembler assembler = new PurchaseOrderResourceAssembler();
